@@ -1,0 +1,25 @@
+\begin{table}[t]
+\centering
+\caption{Detection on the 100-graph benchmark. DR: episodes detected within the horizon (95\% Wilson interval); onset: detected on the first manipulated scan; latency in scans (median).}
+\label{tab:detection}
+\small
+\begin{tabular}{llrrrrrrrr}
+\toprule
+ & & & \multicolumn{3}{c}{$\Phi$ verifier} & \multicolumn{3}{c}{Onset, ablations} & WL \\
+\cmidrule(lr){4-6}\cmidrule(lr){7-9}
+Attack & Family & Ep. & DR (\%) & Onset & Lat. & no div. & no conv. & adj. & DR \\
+\midrule
+Deadlock & violating & 4000 & 100.0 [99.9, 100.0] & 100.0 & 0 & 100.0 & 100.0 & 100.0 & 100.0 \\
+Coil manipulation & violating & 4000 & 100.0 [99.9, 100.0] & 90.8 & 0 & 90.6 & 90.7 & 90.5 & 100.0 \\
+Spurious activation & violating & 4000 & 100.0 [99.9, 100.0] & 100.0 & 0 & 99.8 & 100.0 & 99.8 & 100.0 \\
+Step suppression & violating & 4000 & 100.0 [99.9, 100.0] & 100.0 & 0 & 100.0 & 100.0 & 100.0 & 100.0 \\
+Illegal jump & violating & 4000 & 100.0 [99.9, 100.0] & 100.0 & 0 & 100.0 & 100.0 & 100.0 & 100.0 \\
+OR exclusivity violation & violating & 4000 & 100.0 [99.9, 100.0] & 100.0 & 0 & 7.4 & 100.0 & 0.0 & 100.0 \\
+Partial AND divergence & violating & 3840 & 100.0 [99.9, 100.0] & 100.0 & 0 & 0.0 & 100.0 & 0.0 & 100.0 \\
+Premature AND convergence & violating & 3760 & 100.0 [99.9, 100.0] & 100.0 & 0 & 100.0 & 0.0 & 0.0 & 100.0 \\
+Delay (freeze) & stealthy & 4000 & 0.0 [0.0, 0.1] & 0.0 & -- & 0.0 & 0.0 & 0.0 & 1.2 \\
+Wrong OR branch & stealthy & 4000 & 0.0 [0.0, 0.1] & 0.0 & -- & 0.0 & 0.0 & 0.0 & 3.5 \\
+Replay & stealthy & 4000 & 47.1 [45.5, 48.6] & 0.0 & 5 & 0.0 & 0.0 & 0.0 & 48.4 \\
+\bottomrule
+\end{tabular}
+\end{table}

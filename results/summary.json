@@ -1,0 +1,6689 @@
+{
+ "meta": {
+  "generated": "2026-10-12T22:42:24",
+  "config": {
+   "profile": "full",
+   "episodes": 40,
+   "test_scans": 50000,
+   "train_scans": [
+    1000,
+    5000,
+    20000,
+    100000
+   ],
+   "dt": 1.0,
+   "jitter": 0.2,
+   "workers": 16
+  },
+  "graphs": 100,
+  "case_studies": 1,
+  "episodes": 44040,
+  "transitions": 5049899,
+  "detectors": {
+   "phi_full": "Phi verifier (R1-R4)",
+   "phi_no_divergence": "Ablation: no divergence semantics",
+   "phi_no_convergence": "Ablation: no convergence semantics",
+   "phi_adjacency": "Ablation: adjacency only",
+   "wl_transition_1000": "Transition whitelist (1,000 scans)",
+   "wl_transition_5000": "Transition whitelist (5,000 scans)",
+   "wl_transition_20000": "Transition whitelist (20,000 scans)",
+   "wl_transition_100000": "Transition whitelist (100,000 scans)",
+   "wl_state_100000": "State whitelist (100,000 scans)"
+  },
+  "attacks": {
+   "deadlock": {
+    "name": "deadlock",
+    "family": "violating",
+    "title": "Deadlock",
+    "description": "All coils forced to 0: no step is active."
+   },
+   "coil_manipulation": {
+    "name": "coil_manipulation",
+    "family": "violating",
+    "title": "Coil manipulation",
+    "description": "A random subset of coils receives random binary values at every scan."
+   },
+   "spurious_activation": {
+    "name": "spurious_activation",
+    "family": "violating",
+    "title": "Spurious activation",
+    "description": "An inactive step is forced active."
+   },
+   "step_suppression": {
+    "name": "step_suppression",
+    "family": "violating",
+    "title": "Step suppression",
+    "description": "An active step is forced inactive (lost token)."
+   },
+   "illegal_jump": {
+    "name": "illegal_jump",
+    "family": "violating",
+    "title": "Illegal jump",
+    "description": "The token of an active step is moved to a step that is not one of its successors."
+   },
+   "or_violation": {
+    "name": "or_violation",
+    "family": "violating",
+    "title": "OR exclusivity violation",
+    "description": "When an OR divergence fires, a second alternative is activated as well."
+   },
+   "partial_and": {
+    "name": "partial_and",
+    "family": "violating",
+    "title": "Partial AND divergence",
+    "description": "When an AND divergence fires, one of its branches is not activated."
+   },
+   "premature_join": {
+    "name": "premature_join",
+    "family": "violating",
+    "title": "Premature AND convergence",
+    "description": "A convergence step is activated before all its predecessor branches finished."
+   },
+   "delay": {
+    "name": "delay",
+    "family": "stealthy",
+    "title": "Delay (freeze)",
+    "description": "The observed configuration is frozen, then the execution continues late."
+   },
+   "wrong_branch": {
+    "name": "wrong_branch",
+    "family": "stealthy",
+    "title": "Wrong OR branch",
+    "description": "At an OR divergence the observation follows the other, legal alternative."
+   },
+   "replay": {
+    "name": "replay",
+    "family": "stealthy",
+    "title": "Replay",
+    "description": "A recorded legal segment starting from the same configuration is replayed."
+   }
+  }
+ },
+ "benchmark": {
+  "tiers": {
+   "small": {
+    "graphs": 25,
+    "steps": {
+     "min": 11,
+     "median": 18,
+     "max": 25
+    },
+    "edges": {
+     "min": 15,
+     "median": 23,
+     "max": 35
+    },
+    "and_divergences": {
+     "min": 0,
+     "median": 1,
+     "max": 6
+    },
+    "or_divergences": {
+     "min": 1,
+     "median": 2,
+     "max": 4
+    },
+    "and_convergences": {
+     "min": 0,
+     "median": 1,
+     "max": 5
+    },
+    "or_convergences": {
+     "min": 1,
+     "median": 2,
+     "max": 4
+    },
+    "max_concurrency": {
+     "min": 1,
+     "median": 3,
+     "max": 6
+    },
+    "violating_detection": 1.0
+   },
+   "medium": {
+    "graphs": 30,
+    "steps": {
+     "min": 26,
+     "median": 43.5,
+     "max": 58
+    },
+    "edges": {
+     "min": 34,
+     "median": 58.0,
+     "max": 91
+    },
+    "and_divergences": {
+     "min": 0,
+     "median": 5.0,
+     "max": 11
+    },
+    "or_divergences": {
+     "min": 1,
+     "median": 3.5,
+     "max": 8
+    },
+    "and_convergences": {
+     "min": 1,
+     "median": 5.5,
+     "max": 13
+    },
+    "or_convergences": {
+     "min": 1,
+     "median": 3.5,
+     "max": 8
+    },
+    "max_concurrency": {
+     "min": 2,
+     "median": 5.0,
+     "max": 11
+    },
+    "violating_detection": 1.0
+   },
+   "large": {
+    "graphs": 25,
+    "steps": {
+     "min": 62,
+     "median": 88,
+     "max": 120
+    },
+    "edges": {
+     "min": 85,
+     "median": 117,
+     "max": 162
+    },
+    "and_divergences": {
+     "min": 1,
+     "median": 6,
+     "max": 15
+    },
+    "or_divergences": {
+     "min": 5,
+     "median": 9,
+     "max": 17
+    },
+    "and_convergences": {
+     "min": 0,
+     "median": 6,
+     "max": 16
+    },
+    "or_convergences": {
+     "min": 5,
+     "median": 9,
+     "max": 17
+    },
+    "max_concurrency": {
+     "min": 4,
+     "median": 6,
+     "max": 13
+    },
+    "violating_detection": 1.0
+   },
+   "complex": {
+    "graphs": 20,
+    "steps": {
+     "min": 41,
+     "median": 71.0,
+     "max": 96
+    },
+    "edges": {
+     "min": 55,
+     "median": 102.5,
+     "max": 164
+    },
+    "and_divergences": {
+     "min": 0,
+     "median": 6.0,
+     "max": 24
+    },
+    "or_divergences": {
+     "min": 7,
+     "median": 10.0,
+     "max": 16
+    },
+    "and_convergences": {
+     "min": 0,
+     "median": 6.5,
+     "max": 21
+    },
+    "or_convergences": {
+     "min": 7,
+     "median": 10.0,
+     "max": 16
+    },
+    "max_concurrency": {
+     "min": 2,
+     "median": 11.0,
+     "max": 21
+    },
+    "violating_detection": 1.0
+   }
+  },
+  "detection": {
+   "phi_full": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9085,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.1245
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1883,
+     "rate": 0.47075,
+     "ci": [
+      0.45531683830756814,
+      0.4862392911856665
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 5.104089219330855
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9884177215189873
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 1883,
+     "rate": 0.15691666666666668,
+     "ci": [
+      0.15051876347242463,
+      0.16353416438360438
+     ],
+     "onset_rate": 0.0
+    }
+   },
+   "phi_no_divergence": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9065,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.1295
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.99775,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0105
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 3974,
+     "rate": 0.9935,
+     "ci": [
+      0.9904926707695205,
+      0.9955603239343658
+     ],
+     "onset_rate": 0.07425,
+     "latency": {
+      "median": 4.0,
+      "q1": 2.0,
+      "q3": 6.0,
+      "mean": 4.040764972320081
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 3.0,
+      "q1": 2.0,
+      "q3": 5.0,
+      "mean": 3.60390625
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1883,
+     "rate": 0.47075,
+     "ci": [
+      0.45531683830756814,
+      0.4862392911856665
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 5.104089219330855
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31574,
+     "rate": 0.9991772151898735,
+     "ci": [
+      0.9987946481477487,
+      0.9994384274160778
+     ],
+     "onset_rate": 0.7491772151898735
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 1883,
+     "rate": 0.15691666666666668,
+     "ci": [
+      0.15051876347242463,
+      0.16353416438360438
+     ],
+     "onset_rate": 0.0
+    }
+   },
+   "phi_no_convergence": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.90725,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.12675
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 2.0,
+      "q1": 1.0,
+      "q3": 4.0,
+      "mean": 3.0039893617021276
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1883,
+     "rate": 0.47075,
+     "ci": [
+      0.45531683830756814,
+      0.4862392911856665
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 5.104089219330855
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.8692721518987342
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 1883,
+     "rate": 0.15691666666666668,
+     "ci": [
+      0.15051876347242463,
+      0.16353416438360438
+     ],
+     "onset_rate": 0.0
+    }
+   },
+   "phi_adjacency": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 3999,
+     "rate": 0.99975,
+     "ci": [
+      0.9985851325891636,
+      0.9999558686332625
+     ],
+     "onset_rate": 0.90525,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.13203300825206302
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.99775,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0105
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 3907,
+     "rate": 0.97675,
+     "ci": [
+      0.9716023169308192,
+      0.980982820303381
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 4.0,
+      "q1": 2.0,
+      "q3": 6.0,
+      "mean": 4.379831072434093
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3360,
+     "rate": 0.875,
+     "ci": [
+      0.8641633031273843,
+      0.8850871342475586
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 3.0,
+      "q1": 2.0,
+      "q3": 5.0,
+      "mean": 3.505059523809524
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 2.0,
+      "q1": 1.0,
+      "q3": 4.0,
+      "mean": 3.0039893617021276
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 0,
+     "rate": 0.0,
+     "ci": [
+      0.0,
+      0.000959478516832434
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": null,
+      "q1": null,
+      "q3": null,
+      "mean": null
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1883,
+     "rate": 0.47075,
+     "ci": [
+      0.45531683830756814,
+      0.4862392911856665
+     ],
+     "onset_rate": 0.0,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 5.104089219330855
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31026,
+     "rate": 0.9818354430379747,
+     "ci": [
+      0.9803033359964165,
+      0.9832504112163906
+     ],
+     "onset_rate": 0.6206329113924051
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 1883,
+     "rate": 0.15691666666666668,
+     "ci": [
+      0.15051876347242463,
+      0.16353416438360438
+     ],
+     "onset_rate": 0.0
+    }
+   },
+   "wl_transition_1000": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.91275,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.118
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 556,
+     "rate": 0.139,
+     "ci": [
+      0.12862492581590487,
+      0.15006781767324814
+     ],
+     "onset_rate": 0.0715,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 6.0,
+      "mean": 3.035971223021583
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 1104,
+     "rate": 0.276,
+     "ci": [
+      0.2623667093273419,
+      0.290063137048199
+     ],
+     "onset_rate": 0.11925,
+     "latency": {
+      "median": 1.0,
+      "q1": 0.0,
+      "q3": 4.0,
+      "mean": 2.128623188405797
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 2312,
+     "rate": 0.578,
+     "ci": [
+      0.5626268678677897,
+      0.5932234534835843
+     ],
+     "onset_rate": 0.0935,
+     "latency": {
+      "median": 4.0,
+      "q1": 2.0,
+      "q3": 6.0,
+      "mean": 4.041089965397924
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9889556962025317
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 3972,
+     "rate": 0.331,
+     "ci": [
+      0.32263563860322886,
+      0.339472531834475
+     ],
+     "onset_rate": 0.09475
+    }
+   },
+   "wl_transition_5000": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9105,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.122
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 238,
+     "rate": 0.0595,
+     "ci": [
+      0.052582976506643425,
+      0.06726232406668593
+     ],
+     "onset_rate": 0.01675,
+     "latency": {
+      "median": 4.5,
+      "q1": 0.0,
+      "q3": 8.0,
+      "mean": 4.53781512605042
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 582,
+     "rate": 0.1455,
+     "ci": [
+      0.1349127650920854,
+      0.15676750517634871
+     ],
+     "onset_rate": 0.04975,
+     "latency": {
+      "median": 2.0,
+      "q1": 0.0,
+      "q3": 5.0,
+      "mean": 2.7285223367697595
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 2098,
+     "rate": 0.5245,
+     "ci": [
+      0.5090073539891282,
+      0.5399456315635469
+     ],
+     "onset_rate": 0.0315,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 4.620591039084843
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9886708860759493
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 2918,
+     "rate": 0.24316666666666667,
+     "ci": [
+      0.23557395647090631,
+      0.250923766058188
+     ],
+     "onset_rate": 0.03266666666666666
+    }
+   },
+   "wl_transition_20000": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.909,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.12375
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 121,
+     "rate": 0.03025,
+     "ci": [
+      0.02537630085282062,
+      0.03602512921374344
+     ],
+     "onset_rate": 0.006,
+     "latency": {
+      "median": 6.0,
+      "q1": 2.0,
+      "q3": 8.0,
+      "mean": 5.355371900826446
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 345,
+     "rate": 0.08625,
+     "ci": [
+      0.07794210066982482,
+      0.09535186780285398
+     ],
+     "onset_rate": 0.0215,
+     "latency": {
+      "median": 2.0,
+      "q1": 0.5,
+      "q3": 5.0,
+      "mean": 3.084057971014493
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1992,
+     "rate": 0.498,
+     "ci": [
+      0.4825143176264067,
+      0.5134895202876606
+     ],
+     "onset_rate": 0.0115,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 4.877008032128514
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9884810126582279
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 2458,
+     "rate": 0.20483333333333334,
+     "ci": [
+      0.19770737492435628,
+      0.21214821663893121
+     ],
+     "onset_rate": 0.013
+    }
+   },
+   "wl_transition_100000": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.909,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.12375
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 49,
+     "rate": 0.01225,
+     "ci": [
+      0.009278706557637054,
+      0.016157264735532986
+     ],
+     "onset_rate": 0.002,
+     "latency": {
+      "median": 6.0,
+      "q1": 3.5,
+      "q3": 8.0,
+      "mean": 5.387755102040816
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 138,
+     "rate": 0.0345,
+     "ci": [
+      0.029275704843113308,
+      0.040617569656057693
+     ],
+     "onset_rate": 0.00425,
+     "latency": {
+      "median": 3.0,
+      "q1": 1.0,
+      "q3": 6.0,
+      "mean": 3.6231884057971016
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 1937,
+     "rate": 0.48425,
+     "ci": [
+      0.4687850650510962,
+      0.49974515852218393
+     ],
+     "onset_rate": 0.00375,
+     "latency": {
+      "median": 5.0,
+      "q1": 3.0,
+      "q3": 7.0,
+      "mean": 5.016520392359318
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31600,
+     "rate": 1.0,
+     "ci": [
+      0.9998784451571229,
+      0.9999999999999999
+     ],
+     "onset_rate": 0.9884810126582279
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 2124,
+     "rate": 0.177,
+     "ci": [
+      0.17027476076134837,
+      0.1839319791876359
+     ],
+     "onset_rate": 0.0033333333333333335
+    }
+   },
+   "wl_state_100000": {
+    "deadlock": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "coil_manipulation": {
+     "episodes": 4000,
+     "detected": 3995,
+     "rate": 0.99875,
+     "ci": [
+      0.9970769520710965,
+      0.9994659681083631
+     ],
+     "onset_rate": 0.90475,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.12891113892365458
+     },
+     "graphs": 100
+    },
+    "spurious_activation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "step_suppression": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "illegal_jump": {
+     "episodes": 4000,
+     "detected": 3611,
+     "rate": 0.90275,
+     "ci": [
+      0.8931774780484154,
+      0.9115496620062762
+     ],
+     "onset_rate": 0.811,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.25976183882581
+     },
+     "graphs": 100
+    },
+    "or_violation": {
+     "episodes": 4000,
+     "detected": 4000,
+     "rate": 1.0,
+     "ci": [
+      0.9990405214831674,
+      0.9999999999999999
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 100
+    },
+    "partial_and": {
+     "episodes": 3840,
+     "detected": 3840,
+     "rate": 1.0,
+     "ci": [
+      0.9990005831665906,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 96
+    },
+    "premature_join": {
+     "episodes": 3760,
+     "detected": 3760,
+     "rate": 1.0,
+     "ci": [
+      0.9989793406821372,
+      1.0
+     ],
+     "onset_rate": 1.0,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 0.0,
+      "mean": 0.0
+     },
+     "graphs": 94
+    },
+    "delay": {
+     "episodes": 4000,
+     "detected": 14,
+     "rate": 0.0035,
+     "ci": [
+      0.002086047744245911,
+      0.005866714422968694
+     ],
+     "onset_rate": 0.002,
+     "latency": {
+      "median": 0.0,
+      "q1": 0.0,
+      "q3": 8.25,
+      "mean": 3.2142857142857144
+     },
+     "graphs": 100
+    },
+    "wrong_branch": {
+     "episodes": 4000,
+     "detected": 52,
+     "rate": 0.013,
+     "ci": [
+      0.009927575881841604,
+      0.017006956193553184
+     ],
+     "onset_rate": 0.00175,
+     "latency": {
+      "median": 3.0,
+      "q1": 1.0,
+      "q3": 5.0,
+      "mean": 3.6346153846153846
+     },
+     "graphs": 100
+    },
+    "replay": {
+     "episodes": 4000,
+     "detected": 27,
+     "rate": 0.00675,
+     "ci": [
+      0.004643196615295195,
+      0.00980332894156
+     ],
+     "onset_rate": 0.001,
+     "latency": {
+      "median": 3.0,
+      "q1": 2.0,
+      "q3": 6.0,
+      "mean": 3.888888888888889
+     },
+     "graphs": 100
+    },
+    "family:violating": {
+     "episodes": 31600,
+     "detected": 31206,
+     "rate": 0.9875316455696203,
+     "ci": [
+      0.9862475556146555,
+      0.9886972118594353
+     ],
+     "onset_rate": 0.9640189873417722
+    },
+    "family:stealthy": {
+     "episodes": 12000,
+     "detected": 93,
+     "rate": 0.00775,
+     "ci": [
+      0.006330882160332795,
+      0.009484188241795803
+     ],
+     "onset_rate": 0.0015833333333333333
+    }
+   }
+  },
+  "false_alarms": {
+   "phi_full": {
+    "transitions": 4999900,
+    "alarms": 0,
+    "rate": 0.0,
+    "upper95": 5.991582583408928e-07,
+    "per_hour": 0.0,
+    "graphs_with_alarms": 0
+   },
+   "phi_no_divergence": {
+    "transitions": 4999900,
+    "alarms": 0,
+    "rate": 0.0,
+    "upper95": 5.991582583408928e-07,
+    "per_hour": 0.0,
+    "graphs_with_alarms": 0
+   },
+   "phi_no_convergence": {
+    "transitions": 4999900,
+    "alarms": 0,
+    "rate": 0.0,
+    "upper95": 5.991582583408928e-07,
+    "per_hour": 0.0,
+    "graphs_with_alarms": 0
+   },
+   "phi_adjacency": {
+    "transitions": 4999900,
+    "alarms": 0,
+    "rate": 0.0,
+    "upper95": 5.991582583408928e-07,
+    "per_hour": 0.0,
+    "graphs_with_alarms": 0
+   },
+   "wl_transition_1000": {
+    "transitions": 4999900,
+    "alarms": 418987,
+    "rate": 0.08379907598151963,
+    "upper95": 0.0840422751173404,
+    "per_hour": 301.67667353347065,
+    "graphs_with_alarms": 82
+   },
+   "wl_transition_5000": {
+    "transitions": 4999900,
+    "alarms": 143012,
+    "rate": 0.02860297205944119,
+    "upper95": 0.028749444453730504,
+    "per_hour": 102.97069941398829,
+    "graphs_with_alarms": 73
+   },
+   "wl_transition_20000": {
+    "transitions": 4999900,
+    "alarms": 60531,
+    "rate": 0.012106442128842577,
+    "upper95": 0.01220267798399523,
+    "per_hour": 43.583191663833276,
+    "graphs_with_alarms": 70
+   },
+   "wl_transition_100000": {
+    "transitions": 4999900,
+    "alarms": 20610,
+    "rate": 0.004122082441648833,
+    "upper95": 0.0041786259671517155,
+    "per_hour": 14.839496789935799,
+    "graphs_with_alarms": 61
+   },
+   "wl_state_100000": {
+    "transitions": 4999900,
+    "alarms": 6918,
+    "rate": 0.001383627672553451,
+    "upper95": 0.001416595514192983,
+    "per_hour": 4.981059621192424,
+    "graphs_with_alarms": 47
+   }
+  },
+  "rules": {
+   "deadlock": {
+    "R1": 1.0,
+    "R2": 0.0,
+    "R3": 1.0,
+    "R4": 0.0
+   },
+   "coil_manipulation": {
+    "R1": 0.0055,
+    "R2": 0.9615,
+    "R3": 0.208,
+    "R4": 0.01925
+   },
+   "spurious_activation": {
+    "R1": 0.0,
+    "R2": 0.99775,
+    "R3": 0.00225,
+    "R4": 0.0
+   },
+   "step_suppression": {
+    "R1": 0.29,
+    "R2": 0.0,
+    "R3": 1.0,
+    "R4": 0.0
+   },
+   "illegal_jump": {
+    "R1": 0.0,
+    "R2": 0.997,
+    "R3": 1.0,
+    "R4": 0.0
+   },
+   "or_violation": {
+    "R1": 0.0,
+    "R2": 0.0,
+    "R3": 1.0,
+    "R4": 0.07425
+   },
+   "partial_and": {
+    "R1": 0.0,
+    "R2": 0.0,
+    "R3": 1.0,
+    "R4": 0.0
+   },
+   "premature_join": {
+    "R1": 0.0,
+    "R2": 0.0,
+    "R3": 0.0,
+    "R4": 1.0
+   },
+   "delay": {
+    "R1": null,
+    "R2": null,
+    "R3": null,
+    "R4": null
+   },
+   "wrong_branch": {
+    "R1": null,
+    "R2": null,
+    "R3": null,
+    "R4": null
+   },
+   "replay": {
+    "R1": 0.0,
+    "R2": 0.9622942113648434,
+    "R3": 1.0,
+    "R4": 0.04195432819968136
+   }
+  }
+ },
+ "case_studies": {
+  "CS_reference": {
+   "detection": {
+    "phi_full": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.965625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "phi_no_divergence": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.275,
+      "latency": {
+       "median": 3.0,
+       "q1": 0.0,
+       "q3": 7.0,
+       "mean": 3.575
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.075,
+      "latency": {
+       "median": 3.0,
+       "q1": 2.0,
+       "q3": 4.75,
+       "mean": 3.275
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.759375
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "phi_no_convergence": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.825,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.25
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.125,
+      "latency": {
+       "median": 2.0,
+       "q1": 1.0,
+       "q3": 3.0,
+       "mean": 2.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.86875
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "phi_adjacency": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.825,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.25
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 4.5,
+       "q1": 2.0,
+       "q3": 7.75,
+       "mean": 4.625
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.075,
+      "latency": {
+       "median": 3.0,
+       "q1": 2.0,
+       "q3": 4.75,
+       "mean": 3.275
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.125,
+      "latency": {
+       "median": 2.0,
+       "q1": 1.0,
+       "q3": 3.0,
+       "mean": 2.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.628125
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "wl_transition_1000": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 4,
+      "rate": 0.1,
+      "ci": [
+       0.03957888759557486,
+       0.23052074380473897
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 1.25,
+       "q3": 9.5,
+       "mean": 5.25
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 14,
+      "rate": 0.35,
+      "ci": [
+       0.2213433317104915,
+       0.5049440300646263
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.5,
+       "q1": 4.25,
+       "q3": 6.25,
+       "mean": 5.142857142857143
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.965625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 18,
+      "rate": 0.15,
+      "ci": [
+       0.09703734033668816,
+       0.22467684940246252
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "wl_transition_5000": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.965625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "wl_transition_20000": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.965625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "wl_transition_100000": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.85,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.225
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.325
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 13,
+      "rate": 0.325,
+      "ci": [
+       0.20084316962661725,
+       0.4798254191110201
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": 5.0,
+       "q1": 3.5,
+       "q3": 6.0,
+       "mean": 4.923076923076923
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 320,
+      "rate": 1.0,
+      "ci": [
+       0.9881374103882884,
+       0.9999999999999999
+      ],
+      "onset_rate": 0.965625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 13,
+      "rate": 0.10833333333333334,
+      "ci": [
+       0.0644107989410726,
+       0.1765550800527389
+      ],
+      "onset_rate": 0.0
+     }
+    },
+    "wl_state_100000": {
+     "deadlock": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "coil_manipulation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.825,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.25
+      },
+      "graphs": 1
+     },
+     "spurious_activation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.975,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.025
+      },
+      "graphs": 1
+     },
+     "step_suppression": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "illegal_jump": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 0.975,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.1
+      },
+      "graphs": 1
+     },
+     "or_violation": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "partial_and": {
+      "episodes": 40,
+      "detected": 40,
+      "rate": 1.0,
+      "ci": [
+       0.9123754607496077,
+       1.0
+      ],
+      "onset_rate": 1.0,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "premature_join": {
+      "episodes": 40,
+      "detected": 35,
+      "rate": 0.875,
+      "ci": [
+       0.7388757932976187,
+       0.9454058022645873
+      ],
+      "onset_rate": 0.875,
+      "latency": {
+       "median": 0.0,
+       "q1": 0.0,
+       "q3": 0.0,
+       "mean": 0.0
+      },
+      "graphs": 1
+     },
+     "delay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "wrong_branch": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "replay": {
+      "episodes": 40,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.08762453925039232
+      ],
+      "onset_rate": 0.0,
+      "latency": {
+       "median": null,
+       "q1": null,
+       "q3": null,
+       "mean": null
+      },
+      "graphs": 1
+     },
+     "family:violating": {
+      "episodes": 320,
+      "detected": 315,
+      "rate": 0.984375,
+      "ci": [
+       0.9639500707835037,
+       0.9933080455301507
+      ],
+      "onset_rate": 0.95625
+     },
+     "family:stealthy": {
+      "episodes": 120,
+      "detected": 0,
+      "rate": 0.0,
+      "ci": [
+       0.0,
+       0.031020271055929513
+      ],
+      "onset_rate": 0.0
+     }
+    }
+   },
+   "false_alarms": {
+    "phi_full": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "phi_no_divergence": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "phi_no_convergence": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "phi_adjacency": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "wl_transition_1000": {
+     "transitions": 49999,
+     "alarms": 117,
+     "rate": 0.0023400468009360186,
+     "upper95": 0.002803511840498655,
+     "per_hour": 8.424168483369668,
+     "graphs_with_alarms": 1
+    },
+    "wl_transition_5000": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "wl_transition_20000": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "wl_transition_100000": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    },
+    "wl_state_100000": {
+     "transitions": 49999,
+     "alarms": 0,
+     "rate": 0.0,
+     "upper95": 5.9914048869624814e-05,
+     "per_hour": 0.0,
+     "graphs_with_alarms": 0
+    }
+   },
+   "stats": {
+    "name": "CS_reference",
+    "steps": 26,
+    "edges": 34,
+    "and_divergences": 4,
+    "or_divergences": 3,
+    "and_convergences": 2,
+    "or_convergences": 4,
+    "max_out_degree": 3,
+    "max_in_degree": 3,
+    "tier": "reference",
+    "max_concurrency": 3,
+    "mean_concurrency": 2.146,
+    "structure": ""
+   }
+  }
+ },
+ "graphs": [
+  {
+   "graph": "CS_reference",
+   "name": "CS_reference",
+   "steps": 26,
+   "edges": 34,
+   "and_divergences": 4,
+   "or_divergences": 3,
+   "and_convergences": 2,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "reference",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.146,
+   "structure": "",
+   "test_changes": 11275,
+   "timing_us": 0.4383196006529033,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G001_small",
+   "name": "G001_small",
+   "steps": 13,
+   "edges": 18,
+   "and_divergences": 1,
+   "or_divergences": 2,
+   "and_convergences": 1,
+   "or_convergences": 2,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.444,
+   "structure": "Seq(Loop(Par(s,s)),Alt(s,Seq(Seq(s,s),s),s,skip))",
+   "test_changes": 8271,
+   "timing_us": 0.5850256013218313,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G002_small",
+   "name": "G002_small",
+   "steps": 13,
+   "edges": 18,
+   "and_divergences": 4,
+   "or_divergences": 1,
+   "and_convergences": 4,
+   "or_convergences": 1,
+   "max_out_degree": 2,
+   "max_in_degree": 2,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.681,
+   "structure": "Loop(Seq(Par(s,s),Par(Seq(s,s,s),s),s,Par(s,s)))",
+   "test_changes": 9549,
+   "timing_us": 0.37931999540887773,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 11,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G003_small",
+   "name": "G003_small",
+   "steps": 21,
+   "edges": 26,
+   "and_divergences": 0,
+   "or_divergences": 4,
+   "and_convergences": 0,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 1,
+   "mean_concurrency": 1.0,
+   "structure": "Alt(Loop(Alt(Seq(s,s,s),Seq(s,s))),Seq(Alt(Seq(s,s,s),Seq(s,s),skip),s))",
+   "test_changes": 10257,
+   "timing_us": 0.5636746005620807,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 240,
+   "violating_episodes": 240,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G004_small",
+   "name": "G004_small",
+   "steps": 25,
+   "edges": 31,
+   "and_divergences": 1,
+   "or_divergences": 4,
+   "and_convergences": 1,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.971,
+   "structure": "Par(Loop(Alt(s,s)),Alt(Seq(Seq(s,s,s),s),Loop(Seq(s,s,s)),Seq(s,s,Seq(s,s,s,s))))",
+   "test_changes": 13475,
+   "timing_us": 0.672560598468408,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 6,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 28,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G005_small",
+   "name": "G005_small",
+   "steps": 19,
+   "edges": 23,
+   "and_divergences": 0,
+   "or_divergences": 1,
+   "and_convergences": 0,
+   "or_convergences": 1,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.136,
+   "structure": "Seq(Alt(Par(Seq(s,s),s),Seq(Seq(s,s,s,s,s),Seq(s,s,s),s),Par(s,s)),s)",
+   "test_changes": 10847,
+   "timing_us": 0.590493599884212,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G006_small",
+   "name": "G006_small",
+   "steps": 15,
+   "edges": 23,
+   "and_divergences": 6,
+   "or_divergences": 1,
+   "and_convergences": 5,
+   "or_convergences": 1,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.468,
+   "structure": "Seq(Par(Seq(s,Seq(s,s)),s,Alt(s,s)),Par(s,s),Par(s,s),s)",
+   "test_changes": 10895,
+   "timing_us": 0.7752208039164543,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 16,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G007_small",
+   "name": "G007_small",
+   "steps": 11,
+   "edges": 16,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.782,
+   "structure": "Par(Seq(s,s),Alt(s,s,s,skip),Seq(s,s))",
+   "test_changes": 17481,
+   "timing_us": 0.9969365957658739,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G008_small",
+   "name": "G008_small",
+   "steps": 23,
+   "edges": 30,
+   "and_divergences": 0,
+   "or_divergences": 4,
+   "and_convergences": 0,
+   "or_convergences": 4,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.187,
+   "structure": "Seq(Alt(Loop(Seq(s,s,s,s)),Par(Seq(s,s),Seq(s,s),s)),Alt(Loop(Seq(s,s)),Par(s,s)))",
+   "test_changes": 8996,
+   "timing_us": 0.39012700435705483,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 27,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G009_small",
+   "name": "G009_small",
+   "steps": 12,
+   "edges": 16,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.579,
+   "structure": "Seq(Par(s,s,Alt(s,Seq(s,s),Seq(s,s))),s)",
+   "test_changes": 23353,
+   "timing_us": 0.4345047986134887,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 280,
+   "violating_episodes": 280,
+   "stealthy_detected": 34,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G010_small",
+   "name": "G010_small",
+   "steps": 19,
+   "edges": 24,
+   "and_divergences": 0,
+   "or_divergences": 3,
+   "and_convergences": 1,
+   "or_convergences": 3,
+   "max_out_degree": 4,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.039,
+   "structure": "Alt(Seq(Loop(Seq(s,s,s,s)),Alt(Seq(s,s),Seq(s,s))),Seq(Par(s,s),s),skip)",
+   "test_changes": 13816,
+   "timing_us": 0.5887069972231984,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 23,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G011_small",
+   "name": "G011_small",
+   "steps": 11,
+   "edges": 15,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.754,
+   "structure": "Par(s,s,Alt(s,Seq(s,s),Seq(s,s)))",
+   "test_changes": 17375,
+   "timing_us": 0.9246155968867242,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 280,
+   "violating_episodes": 280,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G012_small",
+   "name": "G012_small",
+   "steps": 18,
+   "edges": 23,
+   "and_divergences": 0,
+   "or_divergences": 3,
+   "and_convergences": 0,
+   "or_convergences": 3,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.746,
+   "structure": "Alt(Seq(s,s,s),Par(Loop(s),Seq(s,s),Alt(Seq(s,s),Seq(s,s))))",
+   "test_changes": 9760,
+   "timing_us": 0.6018003972712904,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G013_small",
+   "name": "G013_small",
+   "steps": 12,
+   "edges": 15,
+   "and_divergences": 1,
+   "or_divergences": 2,
+   "and_convergences": 0,
+   "or_convergences": 2,
+   "max_out_degree": 2,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.063,
+   "structure": "Loop(Seq(Par(s,s),Loop(Seq(s,s,s,s))))",
+   "test_changes": 8351,
+   "timing_us": 0.5534249998163432,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G014_small",
+   "name": "G014_small",
+   "steps": 22,
+   "edges": 27,
+   "and_divergences": 0,
+   "or_divergences": 4,
+   "and_convergences": 0,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 1,
+   "mean_concurrency": 1.0,
+   "structure": "Alt(s,Loop(Loop(Seq(s,s,s,s,s,s))),Loop(Seq(s,Seq(s,s),Seq(s,s))))",
+   "test_changes": 10631,
+   "timing_us": 0.3434787970036268,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 240,
+   "violating_episodes": 240,
+   "stealthy_detected": 25,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G015_small",
+   "name": "G015_small",
+   "steps": 22,
+   "edges": 28,
+   "and_divergences": 0,
+   "or_divergences": 3,
+   "and_convergences": 0,
+   "or_convergences": 3,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 1,
+   "mean_concurrency": 1.0,
+   "structure": "Alt(Loop(Alt(s,Seq(s,s),Seq(s,s,s,s,s,s,s,s,s),skip)),s,s)",
+   "test_changes": 12688,
+   "timing_us": 0.3275071969255805,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 240,
+   "violating_episodes": 240,
+   "stealthy_detected": 27,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G016_small",
+   "name": "G016_small",
+   "steps": 11,
+   "edges": 16,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 2,
+   "or_convergences": 1,
+   "max_out_degree": 4,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 4,
+   "mean_concurrency": 3.481,
+   "structure": "Par(Seq(Par(s,s),s),s,Alt(s,s,s))",
+   "test_changes": 17012,
+   "timing_us": 0.4566344025079161,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 12,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G017_small",
+   "name": "G017_small",
+   "steps": 20,
+   "edges": 23,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 2.6,
+   "structure": "Par(Seq(Par(Seq(s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s)),Loop(s)),s)",
+   "test_changes": 13676,
+   "timing_us": 0.3801103972364217,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 10,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G018_small",
+   "name": "G018_small",
+   "steps": 25,
+   "edges": 35,
+   "and_divergences": 5,
+   "or_divergences": 3,
+   "and_convergences": 4,
+   "or_convergences": 3,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.911,
+   "structure": "Loop(Seq(Par(Seq(s,s),s,Seq(s,s)),Alt(s,s),Par(s,Seq(s,s,s),Seq(s,s)),Par(s,s),Alt(s,s)))",
+   "test_changes": 10861,
+   "timing_us": 0.4377430013846606,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 11,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G019_small",
+   "name": "G019_small",
+   "steps": 13,
+   "edges": 15,
+   "and_divergences": 0,
+   "or_divergences": 2,
+   "and_convergences": 0,
+   "or_convergences": 2,
+   "max_out_degree": 2,
+   "max_in_degree": 2,
+   "tier": "small",
+   "max_concurrency": 1,
+   "mean_concurrency": 1.0,
+   "structure": "Alt(Seq(s,Loop(Seq(s,s))),Seq(s,s,s,s))",
+   "test_changes": 8427,
+   "timing_us": 0.33013580250553787,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 240,
+   "violating_episodes": 240,
+   "stealthy_detected": 24,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G020_small",
+   "name": "G020_small",
+   "steps": 14,
+   "edges": 20,
+   "and_divergences": 1,
+   "or_divergences": 2,
+   "and_convergences": 1,
+   "or_convergences": 2,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "small",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.271,
+   "structure": "Par(Seq(s,s),Alt(Loop(s),s,Par(s,s,Seq(s,s))))",
+   "test_changes": 15974,
+   "timing_us": 0.3805604006629437,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G021_small",
+   "name": "G021_small",
+   "steps": 22,
+   "edges": 32,
+   "and_divergences": 3,
+   "or_divergences": 1,
+   "and_convergences": 4,
+   "or_convergences": 1,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "small",
+   "max_concurrency": 6,
+   "mean_concurrency": 4.082,
+   "structure": "Par(Alt(Par(s,s),Seq(s,s),s,skip),Seq(Par(s,s),s),Seq(Par(Seq(s,s,s,s,s),Seq(s,s,s)),Par(s,s)))",
+   "test_changes": 15958,
+   "timing_us": 0.8306309988256544,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 6,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G022_small",
+   "name": "G022_small",
+   "steps": 17,
+   "edges": 25,
+   "and_divergences": 3,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 4,
+   "max_in_degree": 6,
+   "tier": "small",
+   "max_concurrency": 6,
+   "mean_concurrency": 4.341,
+   "structure": "Par(s,Seq(s,Par(Seq(s,s),Seq(s,s,s))),Seq(Alt(s,s,s,skip),Par(s,s,s)))",
+   "test_changes": 17490,
+   "timing_us": 0.8164728002157062,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 15,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G023_small",
+   "name": "G023_small",
+   "steps": 19,
+   "edges": 25,
+   "and_divergences": 3,
+   "or_divergences": 1,
+   "and_convergences": 3,
+   "or_convergences": 1,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 4,
+   "mean_concurrency": 3.823,
+   "structure": "Par(Seq(Par(s,s),Par(Seq(s,s,s,s),Seq(s,s,s,s,s,s))),Alt(s,s),s)",
+   "test_changes": 18626,
+   "timing_us": 0.7428473967593163,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G024_small",
+   "name": "G024_small",
+   "steps": 18,
+   "edges": 22,
+   "and_divergences": 1,
+   "or_divergences": 1,
+   "and_convergences": 1,
+   "or_convergences": 1,
+   "max_out_degree": 3,
+   "max_in_degree": 4,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.741,
+   "structure": "Seq(s,Par(Seq(s,s,s,s),s,s),Loop(s),Par(Seq(Seq(s,s),s),Seq(s,s)),s)",
+   "test_changes": 13194,
+   "timing_us": 0.6350350042339414,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 11,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G025_small",
+   "name": "G025_small",
+   "steps": 20,
+   "edges": 28,
+   "and_divergences": 2,
+   "or_divergences": 4,
+   "and_convergences": 1,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "small",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.267,
+   "structure": "Alt(Loop(Par(Seq(s,s),s,s)),Seq(s,Par(s,s),Loop(s)),Loop(Seq(s,s)))",
+   "test_changes": 11574,
+   "timing_us": 0.625390000641346,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G026_medium",
+   "name": "G026_medium",
+   "steps": 39,
+   "edges": 53,
+   "and_divergences": 2,
+   "or_divergences": 6,
+   "and_convergences": 2,
+   "or_convergences": 6,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 6,
+   "mean_concurrency": 3.04,
+   "structure": "Par(Seq(s,s,Par(s,s),s,s),Loop(Loop(Loop(Seq(s,s,s,s,s,s,s,s,s,s)))),Alt(s,Par(Alt(s,s,skip),Loop(s)),Par(s,Seq(s,s),Seq(s,s))))",
+   "test_changes": 8643,
+   "timing_us": 0.7305053994059563,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 21,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G027_medium",
+   "name": "G027_medium",
+   "steps": 47,
+   "edges": 67,
+   "and_divergences": 10,
+   "or_divergences": 3,
+   "and_convergences": 12,
+   "or_convergences": 3,
+   "max_out_degree": 5,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 7,
+   "mean_concurrency": 4.743,
+   "structure": "Par(Seq(s,s),Alt(Seq(Par(Seq(s,s,s),s),Par(s,Seq(s,s)),Par(Seq(s,s,s,s,s),Seq(s,s,s,s,s,s),Seq(s,s,s,s)),Par(s,Seq(s,s)),s),Loop(Par(Seq(s,s),s))),Seq(Alt(s,s,skip),Par(s,s),s),Seq(Par(s,s),s))",
+   "test_changes": 16016,
+   "timing_us": 1.0999099991749972,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 3,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G028_medium",
+   "name": "G028_medium",
+   "steps": 44,
+   "edges": 51,
+   "and_divergences": 2,
+   "or_divergences": 2,
+   "and_convergences": 1,
+   "or_convergences": 2,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 3.985,
+   "structure": "Par(Seq(s,s,s),Seq(s,Par(Seq(s,s),Seq(s,Seq(s,s)))),Seq(s,Alt(s,Par(s,Seq(s,s,s)),Seq(s,Seq(s,s,s,s))),Loop(Seq(Seq(s,s),Seq(s,s,s,s,s),Seq(s,s,s),Seq(s,s,s,s,s,s,s))),s))",
+   "test_changes": 10301,
+   "timing_us": 0.8387134002987295,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 6,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 12,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G029_medium",
+   "name": "G029_medium",
+   "steps": 39,
+   "edges": 54,
+   "and_divergences": 3,
+   "or_divergences": 3,
+   "and_convergences": 2,
+   "or_convergences": 3,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "medium",
+   "max_concurrency": 7,
+   "mean_concurrency": 4.446,
+   "structure": "Par(Alt(Par(s,s,Seq(s,s,s,s)),Par(Seq(Seq(s,s),s),Seq(s,Seq(s,s,s),s),Seq(s,Seq(s,s)),s)),Seq(Alt(s,s,s,skip),Alt(s,Par(s,s)),Par(s,Seq(s,s)),s,Par(s,s)),s)",
+   "test_changes": 18130,
+   "timing_us": 0.6571371981408447,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 18,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G030_medium",
+   "name": "G030_medium",
+   "steps": 36,
+   "edges": 48,
+   "and_divergences": 2,
+   "or_divergences": 6,
+   "and_convergences": 2,
+   "or_convergences": 6,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.736,
+   "structure": "Seq(Par(Seq(s,s),Alt(Seq(s,s),s)),Alt(Par(s,Alt(Seq(s,s,s,s,s,s,s),s)),Loop(Alt(s,s)),Par(Seq(s,s),s),skip),Par(Alt(s,s),s))",
+   "test_changes": 12498,
+   "timing_us": 0.467076402856037,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G031_medium",
+   "name": "G031_medium",
+   "steps": 58,
+   "edges": 91,
+   "and_divergences": 7,
+   "or_divergences": 7,
+   "and_convergences": 9,
+   "or_convergences": 7,
+   "max_out_degree": 8,
+   "max_in_degree": 7,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 2.215,
+   "structure": "Alt(Seq(s,Par(Seq(s,s),Alt(s,Seq(s,s,s,s,s),Seq(s,s)))),Par(Seq(Par(Seq(s,s),s),s,s),Loop(Alt(s,Seq(s,s,s))),s,s),Seq(Par(s,s),Par(s,s,s,s),Par(s,Alt(Seq(s,s),s),Seq(s,Seq(s,s,s),s,s),Seq(s,s)),Loop(Loop(s)),s))",
+   "test_changes": 13089,
+   "timing_us": 0.545926799532026,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 23,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G032_medium",
+   "name": "G032_medium",
+   "steps": 55,
+   "edges": 75,
+   "and_divergences": 6,
+   "or_divergences": 2,
+   "and_convergences": 8,
+   "or_convergences": 2,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 3.867,
+   "structure": "Seq(Par(Seq(Par(s,s),Par(Seq(s,s,s,s,s,s,s,s,s,s,s,s),Seq(s,s),s),Par(s,Seq(s,s,s),Seq(s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s))),Seq(s,s,s,s)),Alt(Par(s,s,Loop(Seq(s,s))),s,Seq(s,s,s)))",
+   "test_changes": 12692,
+   "timing_us": 0.611229200148955,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 11,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G033_medium",
+   "name": "G033_medium",
+   "steps": 35,
+   "edges": 50,
+   "and_divergences": 5,
+   "or_divergences": 2,
+   "and_convergences": 3,
+   "or_convergences": 2,
+   "max_out_degree": 6,
+   "max_in_degree": 10,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.403,
+   "structure": "Seq(Alt(Seq(s,Par(Seq(s,s),s),Par(Seq(s,s),s),s,Par(s,Seq(s,s),Seq(s,s,s),s)),Par(Seq(s,s),s,s),Seq(s,s,s,Par(s,Seq(s,s))),skip),Alt(Par(s,s),s,s))",
+   "test_changes": 8766,
+   "timing_us": 0.510198000119999,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 16,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G034_medium",
+   "name": "G034_medium",
+   "steps": 52,
+   "edges": 82,
+   "and_divergences": 10,
+   "or_divergences": 5,
+   "and_convergences": 8,
+   "or_convergences": 5,
+   "max_out_degree": 4,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 3.081,
+   "structure": "Seq(Par(Alt(Par(s,s),Seq(s,s,Seq(s,s,s,s)),skip),s,Seq(s,s)),Loop(Par(s,s)),Loop(Par(Loop(Seq(s,s,s)),Seq(s,s),s,Seq(s,s))),Par(Seq(s,Par(s,s)),s,Seq(s,s,s,s,s)),Par(Seq(Par(s,s),Par(Seq(s,s),Seq(s,s))),Loop(Seq(s,s)),Seq(s,s)))",
+   "test_changes": 14899,
+   "timing_us": 0.6057856022380292,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G035_medium",
+   "name": "G035_medium",
+   "steps": 44,
+   "edges": 61,
+   "and_divergences": 2,
+   "or_divergences": 6,
+   "and_convergences": 2,
+   "or_convergences": 6,
+   "max_out_degree": 4,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 6,
+   "mean_concurrency": 4.187,
+   "structure": "Par(s,Seq(Alt(s,s,s),Par(s,Loop(s),Loop(s),Seq(s,s,Seq(s,s),s)),Loop(Alt(Seq(s,s,s),s,Seq(s,s),skip)),Loop(Seq(s,s,s)),Par(s,s,s)),Seq(Par(s,s),s,s,s,s))",
+   "test_changes": 10674,
+   "timing_us": 1.2002013972960413,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 17,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G036_medium",
+   "name": "G036_medium",
+   "steps": 49,
+   "edges": 72,
+   "and_divergences": 7,
+   "or_divergences": 5,
+   "and_convergences": 6,
+   "or_convergences": 5,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.737,
+   "structure": "Alt(Loop(Par(s,s,s)),Seq(s,Par(Seq(Seq(s,s),Seq(s,s)),s,Alt(Seq(s,s,s),s,Seq(s,s),skip)),Par(s,s),Par(s,s),Alt(Par(s,s),Seq(s,s,s,s),Loop(Seq(s,s,s,s,s,s,s)))),Par(s,s,Seq(s,s),s),skip)",
+   "test_changes": 9727,
+   "timing_us": 0.8246829966083169,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 7,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G037_medium",
+   "name": "G037_medium",
+   "steps": 47,
+   "edges": 68,
+   "and_divergences": 9,
+   "or_divergences": 5,
+   "and_convergences": 9,
+   "or_convergences": 5,
+   "max_out_degree": 4,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 7,
+   "mean_concurrency": 6.534,
+   "structure": "Par(Seq(Loop(s),Par(s,s,s),Par(s,s),Par(s,s,s)),Loop(Seq(Par(Seq(s,s,s),Seq(s,s,s,s,s,s,s,s)),Par(s,Seq(s,s,s,s)))),Alt(s,s,s),Seq(s,s,Alt(s,s),Loop(Seq(s,s)),s))",
+   "test_changes": 14114,
+   "timing_us": 1.261220802552998,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 185,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G038_medium",
+   "name": "G038_medium",
+   "steps": 35,
+   "edges": 56,
+   "and_divergences": 8,
+   "or_divergences": 4,
+   "and_convergences": 10,
+   "or_convergences": 4,
+   "max_out_degree": 4,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 2.079,
+   "structure": "Seq(Par(s,s,Seq(s,s,s)),Par(s,s),Par(Seq(Par(Seq(s,s),s),Par(s,s,s)),s,s),Alt(Seq(Loop(Seq(s,s)),Loop(Seq(s,s))),Par(Alt(Seq(s,s),Seq(s,s)),s),s))",
+   "test_changes": 10194,
+   "timing_us": 0.8095937955658883,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G039_medium",
+   "name": "G039_medium",
+   "steps": 45,
+   "edges": 57,
+   "and_divergences": 4,
+   "or_divergences": 4,
+   "and_convergences": 3,
+   "or_convergences": 4,
+   "max_out_degree": 5,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.182,
+   "structure": "Alt(Seq(Par(s,s,s,s),Par(s,Seq(Seq(s,s,s,s,s,s,s),s)),Alt(s,Seq(s,s),s),Loop(Seq(Seq(s,s),Seq(s,s),s,Seq(s,s,s),s)),Loop(Seq(s,Seq(s,s,s),s,s,s))),Seq(s,s))",
+   "test_changes": 12363,
+   "timing_us": 0.486075400840491,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G040_medium",
+   "name": "G040_medium",
+   "steps": 42,
+   "edges": 59,
+   "and_divergences": 7,
+   "or_divergences": 3,
+   "and_convergences": 3,
+   "or_convergences": 3,
+   "max_out_degree": 5,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.068,
+   "structure": "Seq(Par(Seq(s,s),s,Seq(s,Par(s,s))),Alt(Seq(s,s,s,s),Par(s,Seq(s,s))),Alt(s,Seq(s,Par(s,Seq(s,s),s,Seq(s,s,s,s,s,s)),Par(s,s)),Par(Loop(Seq(s,s,s)),Seq(s,s),Seq(s,s))))",
+   "test_changes": 8500,
+   "timing_us": 0.7758343999739736,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 15,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G041_medium",
+   "name": "G041_medium",
+   "steps": 33,
+   "edges": 49,
+   "and_divergences": 8,
+   "or_divergences": 2,
+   "and_convergences": 9,
+   "or_convergences": 2,
+   "max_out_degree": 5,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 1.701,
+   "structure": "Seq(Par(s,s),Par(Seq(s,s,s,s),Seq(Par(s,s),s),Seq(s,s),s),Par(s,s),s,Loop(Seq(Par(Seq(s,s,s),Seq(s,s,s,s,s,s,s)),Loop(Seq(s,s)))))",
+   "test_changes": 10375,
+   "timing_us": 0.46057619620114565,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G042_medium",
+   "name": "G042_medium",
+   "steps": 31,
+   "edges": 47,
+   "and_divergences": 4,
+   "or_divergences": 2,
+   "and_convergences": 6,
+   "or_convergences": 2,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 10,
+   "mean_concurrency": 6.26,
+   "structure": "Par(Seq(s,s),Seq(Par(s,s),Par(s,Seq(s,s,s,s),Seq(s,s),s),Loop(Seq(s,s))),Seq(s,s),Seq(Alt(s,s,skip),Par(s,s,s,Seq(s,s)),s,s))",
+   "test_changes": 13997,
+   "timing_us": 0.5262509977910668,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 2,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G043_medium",
+   "name": "G043_medium",
+   "steps": 30,
+   "edges": 37,
+   "and_divergences": 2,
+   "or_divergences": 4,
+   "and_convergences": 2,
+   "or_convergences": 4,
+   "max_out_degree": 3,
+   "max_in_degree": 3,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.717,
+   "structure": "Loop(Par(Seq(s,Par(s,s),s),Seq(Alt(Seq(s,s,s),Seq(s,s)),Loop(Seq(s,s,s,s,s,s,s))),Loop(Seq(s,Seq(s,s),s))))",
+   "test_changes": 13673,
+   "timing_us": 0.5327937949914485,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 10,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G044_medium",
+   "name": "G044_medium",
+   "steps": 49,
+   "edges": 80,
+   "and_divergences": 10,
+   "or_divergences": 4,
+   "and_convergences": 10,
+   "or_convergences": 4,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.964,
+   "structure": "Alt(Loop(Seq(Par(s,s,s,Seq(s,s,s)),Par(s,s,s),Par(s,s,Seq(s,s,s),Seq(s,s)))),s,Par(Loop(Alt(Seq(s,s),Seq(s,s),s)),Seq(Par(Seq(s,s,s),Seq(s,s,s,s,s)),Par(s,Seq(s,s,s,s,s))),Seq(s,s,s)))",
+   "test_changes": 11259,
+   "timing_us": 0.8706327993422747,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 7,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G045_medium",
+   "name": "G045_medium",
+   "steps": 50,
+   "edges": 80,
+   "and_divergences": 10,
+   "or_divergences": 4,
+   "and_convergences": 12,
+   "or_convergences": 4,
+   "max_out_degree": 9,
+   "max_in_degree": 6,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.692,
+   "structure": "Seq(Alt(s,Par(s,Seq(s,s))),Alt(Seq(Par(s,Seq(s,s,s,s,s),Seq(s,s)),Par(Seq(s,s),Seq(s,s,s)),Par(s,s,s),Par(s,s,s)),Seq(Par(s,s,s,Seq(s,s,s,s,s)),Loop(Seq(s,s)),Par(s,s),Par(s,s,s),s),Loop(s),skip))",
+   "test_changes": 11685,
+   "timing_us": 0.8136344025842845,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G046_medium",
+   "name": "G046_medium",
+   "steps": 26,
+   "edges": 34,
+   "and_divergences": 1,
+   "or_divergences": 3,
+   "and_convergences": 1,
+   "or_convergences": 3,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.906,
+   "structure": "Alt(Par(s,s,s,s),Loop(Par(Seq(Seq(s,s,s),Seq(s,s,s),Seq(s,s)),Alt(Seq(s,s),s,Seq(s,s,s)))))",
+   "test_changes": 16175,
+   "timing_us": 0.4748779989313334,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 23,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G047_medium",
+   "name": "G047_medium",
+   "steps": 48,
+   "edges": 77,
+   "and_divergences": 10,
+   "or_divergences": 4,
+   "and_convergences": 13,
+   "or_convergences": 4,
+   "max_out_degree": 5,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 5,
+   "mean_concurrency": 2.885,
+   "structure": "Seq(Loop(Par(Alt(s,Seq(s,s,s),s),s,Seq(Seq(s,s),s,s,s),Seq(s,s,s))),Par(Seq(s,s),Alt(s,Par(s,s)),Seq(Par(s,s),s)),Par(Seq(Par(s,s),Par(s,s)),Seq(s,s)),Par(s,Loop(Seq(s,s,s))),Par(s,s,Seq(s,s,s),s))",
+   "test_changes": 12602,
+   "timing_us": 0.9757125983014703,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 2,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 10,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G048_medium",
+   "name": "G048_medium",
+   "steps": 38,
+   "edges": 48,
+   "and_divergences": 4,
+   "or_divergences": 2,
+   "and_convergences": 3,
+   "or_convergences": 2,
+   "max_out_degree": 6,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 6,
+   "mean_concurrency": 4.127,
+   "structure": "Par(Seq(s,s),Seq(s,s),Seq(s,s),Seq(Par(Seq(s,s),Alt(s,s),Seq(s,s,s)),Par(s,s),Loop(Seq(Seq(s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s),Seq(s,s))),s))",
+   "test_changes": 10091,
+   "timing_us": 0.8077187987510115,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G049_medium",
+   "name": "G049_medium",
+   "steps": 43,
+   "edges": 48,
+   "and_divergences": 0,
+   "or_divergences": 3,
+   "and_convergences": 1,
+   "or_convergences": 3,
+   "max_out_degree": 4,
+   "max_in_degree": 3,
+   "tier": "medium",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.022,
+   "structure": "Seq(Loop(s),Loop(Loop(Seq(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)))),Par(s,s,s))",
+   "test_changes": 9801,
+   "timing_us": 0.49355080118402833,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 12,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G050_medium",
+   "name": "G050_medium",
+   "steps": 46,
+   "edges": 65,
+   "and_divergences": 5,
+   "or_divergences": 8,
+   "and_convergences": 5,
+   "or_convergences": 8,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 8,
+   "mean_concurrency": 4.582,
+   "structure": "Par(Alt(Seq(s,s),Seq(Loop(s),Loop(Seq(s,s)),Loop(s),s)),Seq(Alt(Seq(s,s),s,skip),Alt(Seq(s,s),Par(s,s,s),Seq(s,s))),Loop(Seq(s,s,Par(s,s),s)),Loop(Seq(Par(Seq(s,s),s),Par(s,s),s)))",
+   "test_changes": 17340,
+   "timing_us": 0.7036740018520504,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 364,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 25,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G051_medium",
+   "name": "G051_medium",
+   "steps": 38,
+   "edges": 68,
+   "and_divergences": 11,
+   "or_divergences": 3,
+   "and_convergences": 10,
+   "or_convergences": 3,
+   "max_out_degree": 6,
+   "max_in_degree": 7,
+   "tier": "medium",
+   "max_concurrency": 9,
+   "mean_concurrency": 7.07,
+   "structure": "Par(Alt(Seq(Alt(s,s,Seq(s,s,s)),Loop(Seq(s,s))),Seq(Par(s,s),Par(s,s))),Seq(s,s,s,s),Seq(Par(s,s,s),Par(Seq(s,s),s,s,s),Par(s,Seq(s,s),s)),Seq(s,Par(s,s)))",
+   "test_changes": 14826,
+   "timing_us": 1.1695261986460537,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 13,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G052_medium",
+   "name": "G052_medium",
+   "steps": 48,
+   "edges": 64,
+   "and_divergences": 4,
+   "or_divergences": 1,
+   "and_convergences": 7,
+   "or_convergences": 1,
+   "max_out_degree": 7,
+   "max_in_degree": 9,
+   "tier": "medium",
+   "max_concurrency": 11,
+   "mean_concurrency": 7.42,
+   "structure": "Seq(s,Par(Seq(s,s,s),Seq(Par(s,s),Par(Seq(s,s,s,s,s,s,s,s,s,s),Seq(s,s),Seq(s,s,s,s,s,s,s,s)),s),Seq(Par(Seq(s,s),s),s,Loop(s),Par(s,Seq(s,s,s),s,s)),Seq(Par(s,s),s,Par(s,s,s))))",
+   "test_changes": 25557,
+   "timing_us": 0.8560692018363625,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 24,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G053_medium",
+   "name": "G053_medium",
+   "steps": 28,
+   "edges": 40,
+   "and_divergences": 4,
+   "or_divergences": 3,
+   "and_convergences": 5,
+   "or_convergences": 3,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 3,
+   "mean_concurrency": 1.504,
+   "structure": "Seq(Loop(Alt(Seq(Seq(s,s,s,s),s),Par(s,s,s))),Par(Seq(s,s),Seq(Par(Seq(s,s),s),Par(s,s))),Loop(s),Par(s,s),Par(s,s))",
+   "test_changes": 8358,
+   "timing_us": 0.6828807992860675,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G054_medium",
+   "name": "G054_medium",
+   "steps": 55,
+   "edges": 83,
+   "and_divergences": 7,
+   "or_divergences": 5,
+   "and_convergences": 9,
+   "or_convergences": 5,
+   "max_out_degree": 7,
+   "max_in_degree": 5,
+   "tier": "medium",
+   "max_concurrency": 6,
+   "mean_concurrency": 2.357,
+   "structure": "Seq(Par(s,Seq(Par(s,s),s),Loop(Seq(s,s,s)),Seq(s,Par(s,s))),Alt(Seq(Par(s,s,s,s),s,s,s,s),Loop(s),s,skip),Alt(Par(s,s),Seq(Par(Seq(s,s),s),Alt(Seq(s,s),Seq(s,s,s),s,skip)),Seq(Par(Seq(s,s),s),Par(s,Seq(s,s,s),Seq(s,s,s)),Par(s,s))))",
+   "test_changes": 11825,
+   "timing_us": 0.8078704006038606,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 5,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 25,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G055_medium",
+   "name": "G055_medium",
+   "steps": 28,
+   "edges": 38,
+   "and_divergences": 3,
+   "or_divergences": 2,
+   "and_convergences": 4,
+   "or_convergences": 2,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "medium",
+   "max_concurrency": 7,
+   "mean_concurrency": 4.422,
+   "structure": "Par(Seq(s,s,Par(s,s),s,s),Alt(s,s,s),Seq(s,s,Par(s,s),s),Alt(s,s,Seq(Par(s,s),s,s,s,s)))",
+   "test_changes": 19497,
+   "timing_us": 0.8210722007788718,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 99,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 15,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G056_large",
+   "name": "G056_large",
+   "steps": 91,
+   "edges": 129,
+   "and_divergences": 9,
+   "or_divergences": 13,
+   "and_convergences": 8,
+   "or_convergences": 13,
+   "max_out_degree": 5,
+   "max_in_degree": 6,
+   "tier": "large",
+   "max_concurrency": 8,
+   "mean_concurrency": 3.436,
+   "structure": "Seq(Par(Alt(Loop(Seq(s,s,s,s)),Seq(s,Par(s,s),s),skip),Alt(Par(Seq(s,Seq(s,s,s)),Seq(s,Seq(s,s))),Par(Loop(Seq(s,s)),s,Seq(s,s))),Loop(Seq(Alt(s,s,s,skip),s,Loop(Seq(s,s,s,s)))),Alt(Par(Seq(s,s),s),s,Seq(Loop(s),Par(s,s),Par(s,s),Par(s,s,s)))),Alt(Seq(Loop(Seq(s,s,s)),Alt(s,s,Seq(s,s)),s,Par(s,Seq(s,s))),Seq(s,Loop(Seq(s,s)),Par(s,s),s,Par(s,Seq(s,s))),Seq(s,Par(s,s))))",
+   "test_changes": 12609,
+   "timing_us": 0.7821225968655199,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 588,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 16,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G057_large",
+   "name": "G057_large",
+   "steps": 108,
+   "edges": 151,
+   "and_divergences": 15,
+   "or_divergences": 12,
+   "and_convergences": 13,
+   "or_convergences": 12,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.479,
+   "structure": "Seq(Par(Seq(s,s),s),Loop(Par(Seq(Par(s,s),Alt(Seq(s,s),Seq(s,s,s,s,s)),s,s,Par(s,s)),s)),Alt(Seq(Par(s,s,s),s,Par(Seq(s,s),Alt(s,s),s,s)),Seq(Alt(Seq(Seq(s,s,s),s),s),Par(s,s))),Alt(Loop(Par(Seq(s,s),Alt(s,s,skip),Alt(Seq(s,s,s,s),Seq(s,s,s,s),skip),s)),Seq(Par(s,s),s),Par(Seq(Par(s,Seq(s,s,s)),Par(s,s,s),s,Par(s,s)),Seq(s,s,s))),Par(Seq(s,Par(s,s),Alt(Seq(s,Seq(s,s,s)),s),Par(s,s)),Seq(Alt(s,s,s),Par(Alt(s,Seq(s,s)),s),Par(s,s))))",
+   "test_changes": 11036,
+   "timing_us": 0.6161546043585986,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 9,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 10,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G058_large",
+   "name": "G058_large",
+   "steps": 62,
+   "edges": 85,
+   "and_divergences": 6,
+   "or_divergences": 6,
+   "and_convergences": 6,
+   "or_convergences": 6,
+   "max_out_degree": 7,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.579,
+   "structure": "Alt(Seq(Par(s,s),Loop(Par(s,s)),Par(Seq(Par(s,s),Alt(s,s,Seq(s,s))),Seq(s,s)),Par(s,s)),Seq(Par(Seq(s,s,s),Seq(s,s),Seq(s,s,s),s),Alt(Seq(s,Par(Seq(s,s),Seq(s,s))),s,Par(s,Seq(s,s))),Alt(Seq(s,s,Par(s,s)),Seq(Par(Seq(s,s,s,s),s),s,Alt(s,s),Par(s,s))),s,s),skip)",
+   "test_changes": 9199,
+   "timing_us": 0.7802965992596,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G059_large",
+   "name": "G059_large",
+   "steps": 88,
+   "edges": 127,
+   "and_divergences": 10,
+   "or_divergences": 8,
+   "and_convergences": 9,
+   "or_convergences": 8,
+   "max_out_degree": 8,
+   "max_in_degree": 8,
+   "tier": "large",
+   "max_concurrency": 6,
+   "mean_concurrency": 3.454,
+   "structure": "Seq(Alt(Par(Seq(s,s,s),Seq(s,s),Alt(s,Seq(s,s),Seq(s,s)),Seq(Par(s,s),Par(Seq(s,s),s),s)),Par(Seq(s,s,s,Par(s,s)),Seq(s,s,s)),skip),Alt(Par(s,s,s,s),Par(Loop(Par(s,s)),Seq(s,s),s,s)),Par(s,Seq(s,s),Seq(s,s,s,s,s),s),Alt(Par(Loop(Par(Seq(s,s,s,s),Seq(s,s,s,s,s,s,s,s,s))),Seq(s,Par(s,s,s),Par(s,s),Alt(s,s)),Alt(s,s)),Par(s,s,s,s)))",
+   "test_changes": 14335,
+   "timing_us": 0.8678654034156352,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 10,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G060_large",
+   "name": "G060_large",
+   "steps": 66,
+   "edges": 88,
+   "and_divergences": 3,
+   "or_divergences": 9,
+   "and_convergences": 3,
+   "or_convergences": 9,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "large",
+   "max_concurrency": 5,
+   "mean_concurrency": 2.209,
+   "structure": "Seq(Par(Alt(Loop(Par(s,s,Seq(s,s),s)),s,skip),Loop(s)),Loop(Seq(Alt(Par(s,s),s),Par(Alt(Seq(s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s),s),Alt(s,s,Seq(s,s,s,s,s,s),skip)))),Par(Alt(Seq(s,s,s,s),s,Loop(Seq(s,s,s))),s,Seq(s,s,s)))",
+   "test_changes": 10750,
+   "timing_us": 0.8941273961681873,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 5,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G061_large",
+   "name": "G061_large",
+   "steps": 101,
+   "edges": 111,
+   "and_divergences": 1,
+   "or_divergences": 5,
+   "and_convergences": 2,
+   "or_convergences": 5,
+   "max_out_degree": 5,
+   "max_in_degree": 4,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.922,
+   "structure": "Loop(Loop(Loop(Seq(Loop(Seq(s,s,s,s,s,s,s,s)),Par(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s),s,Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)),Alt(Seq(s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s,s)),s,Par(s,s,Seq(s,s))))))",
+   "test_changes": 12879,
+   "timing_us": 1.1487018025945872,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 46,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G062_large",
+   "name": "G062_large",
+   "steps": 69,
+   "edges": 99,
+   "and_divergences": 9,
+   "or_divergences": 9,
+   "and_convergences": 8,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 5,
+   "mean_concurrency": 2.014,
+   "structure": "Seq(Alt(Seq(Alt(s,s),Par(s,s,s)),Seq(s,s)),s,Par(Alt(s,s,Seq(s,Par(s,s))),Seq(s,s,s),Seq(Par(s,s),Par(s,s),Par(s,s),s)),Alt(Seq(s,s,s,s),Par(s,Seq(s,s)),Seq(Par(s,s,s),s,s,Loop(s))),Alt(Seq(Loop(s),Par(s,s),Par(Loop(Seq(s,s)),Alt(s,Seq(s,s),Seq(s,s)))),s,Par(s,s)))",
+   "test_changes": 11215,
+   "timing_us": 0.9491852018982172,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G063_large",
+   "name": "G063_large",
+   "steps": 97,
+   "edges": 125,
+   "and_divergences": 2,
+   "or_divergences": 10,
+   "and_convergences": 3,
+   "or_convergences": 10,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "large",
+   "max_concurrency": 5,
+   "mean_concurrency": 3.093,
+   "structure": "Par(Seq(Alt(Seq(Par(Seq(s,s),Seq(s,s),Seq(s,s,s,s,s,s,s,s,s)),Alt(Seq(s,s),s)),Par(Seq(Seq(s,s,s),s),s)),Alt(Seq(Alt(s,s),s),Par(Loop(Seq(s,s)),Seq(Seq(s,s,s),Seq(s,s,s,s),s,s,s),s),Seq(s,s),skip)),Seq(Alt(Par(s,s),Seq(Loop(Seq(s,s,s,s)),s)),Par(Seq(s,s,s,s),Seq(s,s)),s,Alt(Par(s,s),Par(Seq(s,s),Seq(s,s)),Par(Seq(Seq(s,s),s,Seq(s,s),s),Seq(s,s)),skip),Alt(Par(Seq(s,Seq(s,s)),Alt(s,s,s)),s,s)))",
+   "test_changes": 17536,
+   "timing_us": 1.0918957996182144,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 393,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G064_large",
+   "name": "G064_large",
+   "steps": 120,
+   "edges": 157,
+   "and_divergences": 5,
+   "or_divergences": 13,
+   "and_convergences": 5,
+   "or_convergences": 13,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 3.025,
+   "structure": "Alt(Seq(Loop(s),s,Alt(s,Seq(s,s)),Alt(Par(s,Alt(Seq(s,s),Seq(s,s),skip)),Seq(Loop(s),Par(s,s)))),Seq(Alt(Par(s,Seq(s,s),s),Par(Seq(s,s),Seq(s,s,s),Seq(s,Seq(s,s)),s)),Par(s,s,Seq(Loop(Seq(s,s,s)),Alt(Seq(s,s),Seq(s,s),s,skip))),Par(s,Seq(s,s),Seq(s,s,s),Seq(s,s)),Loop(Par(Alt(Seq(s,s,s,s),Seq(s,s,s,s,s,s,s,s,s)),Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)),Alt(Seq(s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s,s)),Seq(s,s,s)))))",
+   "test_changes": 11749,
+   "timing_us": 1.028427795972675,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 42,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G065_large",
+   "name": "G065_large",
+   "steps": 76,
+   "edges": 103,
+   "and_divergences": 5,
+   "or_divergences": 7,
+   "and_convergences": 6,
+   "or_convergences": 7,
+   "max_out_degree": 9,
+   "max_in_degree": 9,
+   "tier": "large",
+   "max_concurrency": 10,
+   "mean_concurrency": 4.943,
+   "structure": "Loop(Par(Seq(s,s),Loop(Alt(Par(s,s),Par(s,Seq(s,s,s,s)),Par(s,s,Seq(s,s),s),skip)),Alt(Seq(Par(s,s),Par(Seq(s,s,s),s,s)),Seq(s,s,Par(s,s),s,Alt(s,s,s)),Par(Seq(s,Seq(s,s,s,s,s,s),s),Seq(s,Seq(s,s),s))),Loop(Par(Alt(s,s),Seq(Seq(s,s),Seq(s,s,s,s,s),s,Seq(s,s,s,s,s,s,s,s),s)))))",
+   "test_changes": 16374,
+   "timing_us": 0.698281399672851,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 488,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 24,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G066_large",
+   "name": "G066_large",
+   "steps": 79,
+   "edges": 99,
+   "and_divergences": 3,
+   "or_divergences": 8,
+   "and_convergences": 3,
+   "or_convergences": 8,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "large",
+   "max_concurrency": 8,
+   "mean_concurrency": 4.506,
+   "structure": "Par(Loop(Par(Loop(Loop(s)),Alt(s,Seq(s,s)))),Seq(Loop(Par(Alt(s,Seq(s,s),s),Seq(Seq(s,s),Seq(s,s,s)))),Par(s,Seq(Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)),Par(Seq(s,s,s),s,Seq(s,s,s))),Alt(Par(Seq(s,s,s),Seq(s,s,s,s,s),s,Seq(s,s,s,s,s,s)),s,Seq(Seq(s,s,s,s,s,s),s)))))",
+   "test_changes": 14968,
+   "timing_us": 0.8624160022009164,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 484,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 15,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G067_large",
+   "name": "G067_large",
+   "steps": 111,
+   "edges": 155,
+   "and_divergences": 3,
+   "or_divergences": 17,
+   "and_convergences": 4,
+   "or_convergences": 17,
+   "max_out_degree": 8,
+   "max_in_degree": 8,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.752,
+   "structure": "Alt(Seq(Alt(s,Par(s,s),s),s,Alt(Seq(s,Alt(s,Seq(s,s,s))),Par(s,Seq(Seq(s,s,s,s),s),Loop(s))),Alt(Par(s,s),Seq(Par(s,s),s,s),skip),Par(Seq(Par(s,s),Alt(s,s,Seq(s,s),skip),Alt(s,s,skip)),s)),Seq(Loop(Par(s,s)),Alt(s,s),Par(s,Seq(s,s),Loop(Alt(s,Seq(s,s),skip))),s),Loop(Seq(s,Alt(Par(s,s,s,s),s,Par(s,Seq(s,s),Seq(s,s,s))),Alt(s,s),Alt(Par(Seq(s,s,s),Seq(s,s,s),Seq(s,s,s,s)),Seq(s,s)),Alt(Par(Seq(s,s),Seq(s,s)),s,s))))",
+   "test_changes": 9598,
+   "timing_us": 0.582487799692899,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 12,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G068_large",
+   "name": "G068_large",
+   "steps": 88,
+   "edges": 129,
+   "and_divergences": 10,
+   "or_divergences": 13,
+   "and_convergences": 9,
+   "or_convergences": 13,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 6,
+   "mean_concurrency": 1.493,
+   "structure": "Alt(Seq(Loop(Seq(s,s,s,s)),Par(s,s,s,Seq(s,s)),Alt(Loop(Par(s,s,s)),s,s)),Seq(Alt(Seq(s,s,s),s,Seq(Par(Seq(s,s),s,s),Loop(s),Par(s,s))),Par(Alt(s,Par(s,s,Seq(s,s),s)),Seq(Par(s,s),Alt(s,s,skip),Par(s,s),Par(s,s))),Alt(Par(s,s),s),Par(Seq(s,Par(s,s)),Alt(s,s)),Alt(Seq(s,Par(Seq(s,s),s),Par(s,s)),Seq(Loop(Seq(s,s,s)),Par(Seq(s,s),s)))),Loop(s),skip)",
+   "test_changes": 12269,
+   "timing_us": 1.1689360020682216,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 7,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G069_large",
+   "name": "G069_large",
+   "steps": 64,
+   "edges": 87,
+   "and_divergences": 5,
+   "or_divergences": 9,
+   "and_convergences": 4,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.159,
+   "structure": "Seq(Alt(Par(Seq(Par(s,s),s),Seq(s,s)),Par(s,Seq(s,Par(s,s)),s)),Loop(Alt(Loop(Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s))),Seq(Loop(s),s,s,Par(s,s)))),Loop(Alt(Par(Loop(s),Seq(s,s),s),Seq(s,s),skip)),Par(s,s,s),Par(s,s))",
+   "test_changes": 9715,
+   "timing_us": 0.6210484018083662,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G070_large",
+   "name": "G070_large",
+   "steps": 96,
+   "edges": 146,
+   "and_divergences": 15,
+   "or_divergences": 9,
+   "and_convergences": 15,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 7,
+   "mean_concurrency": 4.354,
+   "structure": "Seq(Par(Alt(Seq(s,s),s,s),Seq(s,s,Loop(s)),s,Alt(s,s)),Par(Alt(s,s,s),Alt(s,Par(s,s,s)),s),Par(Seq(Par(s,s,Seq(s,s,s)),Par(s,s),s),Alt(s,s),Seq(Alt(Par(Seq(s,s,s),Seq(s,s)),Seq(Seq(s,s,s,s,s,s,s),s)),s,Alt(Seq(Seq(s,s,s,s),Seq(s,s,s)),Seq(Seq(s,s,s),Seq(s,s,s),Seq(s,s,s,s),Seq(s,s),Seq(s,s))),Par(s,Seq(s,s,s),s,Alt(s,s)),Par(s,s)),Seq(s,s,s,s)))",
+   "test_changes": 12974,
+   "timing_us": 1.1295053991489112,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 31,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G071_large",
+   "name": "G071_large",
+   "steps": 62,
+   "edges": 99,
+   "and_divergences": 9,
+   "or_divergences": 5,
+   "and_convergences": 5,
+   "or_convergences": 5,
+   "max_out_degree": 11,
+   "max_in_degree": 9,
+   "tier": "large",
+   "max_concurrency": 8,
+   "mean_concurrency": 3.943,
+   "structure": "Alt(Par(Alt(s,Par(s,Seq(s,s)),s),s,Seq(s,s,s),Seq(Par(s,Seq(s,s),s,s),Par(Loop(Seq(s,s)),s,s),Par(Seq(s,s,s),Seq(Seq(s,s),s)))),Seq(s,Par(s,s,Seq(s,s)),s,s),Par(Alt(s,Seq(s,s),Seq(s,s,Par(s,s))),s,Alt(Par(s,s,s,s),Seq(s,s,Par(s,s)),Seq(s,s,s),skip)))",
+   "test_changes": 15561,
+   "timing_us": 0.9450151992496103,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G072_large",
+   "name": "G072_large",
+   "steps": 66,
+   "edges": 86,
+   "and_divergences": 5,
+   "or_divergences": 5,
+   "and_convergences": 5,
+   "or_convergences": 5,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "large",
+   "max_concurrency": 7,
+   "mean_concurrency": 6.383,
+   "structure": "Par(Seq(Par(s,s),s,Par(s,s,s)),Alt(Par(Seq(Alt(s,s,Seq(s,s)),Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s))),Alt(Seq(Seq(s,s),Seq(s,s,s)),Seq(s,s))),Seq(Par(s,s),s,Loop(Seq(s,s))),Seq(s,s),skip),Seq(Par(Seq(s,s),s,Seq(s,s)),Par(s,s)))",
+   "test_changes": 15662,
+   "timing_us": 0.8030803990550339,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 8,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 23,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G073_large",
+   "name": "G073_large",
+   "steps": 76,
+   "edges": 117,
+   "and_divergences": 14,
+   "or_divergences": 7,
+   "and_convergences": 12,
+   "or_convergences": 7,
+   "max_out_degree": 10,
+   "max_in_degree": 7,
+   "tier": "large",
+   "max_concurrency": 13,
+   "mean_concurrency": 7.391,
+   "structure": "Loop(Par(Alt(Par(s,s),Seq(s,s),Par(Seq(Seq(s,s),s,Seq(s,s),s),Seq(s,s),s),skip),Seq(Par(s,s,s,s),Par(s,s,s),Par(s,s),Par(Alt(s,s),s,Seq(s,s,s))),Seq(Par(s,s),Loop(Par(s,Seq(s,s,s),Seq(s,s))),Alt(Seq(s,s,s),Seq(s,Seq(s,s)))),Seq(Par(Alt(Seq(s,s,s,s,s,s,s),Seq(s,s,s,s,s)),s,Alt(s,s)),Par(s,Seq(s,s)))))",
+   "test_changes": 19971,
+   "timing_us": 1.4818259980529547,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 494,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 25,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G074_large",
+   "name": "G074_large",
+   "steps": 114,
+   "edges": 162,
+   "and_divergences": 15,
+   "or_divergences": 11,
+   "and_convergences": 12,
+   "or_convergences": 11,
+   "max_out_degree": 5,
+   "max_in_degree": 9,
+   "tier": "large",
+   "max_concurrency": 12,
+   "mean_concurrency": 7.648,
+   "structure": "Par(Seq(s,Par(Seq(Alt(s,s,s,skip),Par(s,s),Par(s,s),Par(s,s,s),Par(s,s)),Loop(Seq(s,s)),Seq(Par(s,s),Alt(Seq(s,s,s),s,Seq(s,s),skip),Loop(s),Par(s,Seq(s,s),Seq(s,s,s),s)),Seq(s,s,Par(s,Seq(s,s,s,s)),Loop(Seq(s,s,s)),s))),Alt(Seq(Alt(s,s),Par(s,s),Par(Seq(s,s,s,s,s),Loop(Seq(s,s,s,s)),s),s,Par(s,Seq(s,s),s)),Par(Seq(s,Alt(Seq(s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s),s,skip)),Alt(Loop(Seq(s,s,s,s,s,s,s)),Par(s,s),Par(s,s))),skip))",
+   "test_changes": 19298,
+   "timing_us": 0.8745901985093951,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 2673,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 14,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G075_large",
+   "name": "G075_large",
+   "steps": 109,
+   "edges": 155,
+   "and_divergences": 14,
+   "or_divergences": 6,
+   "and_convergences": 16,
+   "or_convergences": 6,
+   "max_out_degree": 6,
+   "max_in_degree": 8,
+   "tier": "large",
+   "max_concurrency": 10,
+   "mean_concurrency": 4.678,
+   "structure": "Seq(Par(Seq(Par(Seq(s,Seq(s,s,s),Seq(s,s,s),Seq(s,s,s)),Seq(s,s,s),Alt(Seq(s,s,s),Seq(s,s),Seq(s,s,s))),s),Seq(s,s,s),Alt(Seq(s,s,Par(s,s),s,Loop(s)),Seq(Par(s,s),Par(s,s),s,s),Par(s,s)),Alt(Par(s,Seq(s,s),s,s),Seq(Par(Seq(s,s),s),Par(s,Seq(s,s),s,s)))),Alt(Seq(s,Par(Seq(s,Seq(s,s,s)),Seq(Seq(s,s),Seq(s,s,s),s,s,Seq(s,s)),Seq(s,s),Seq(s,s,s,s)),Par(s,Seq(s,s),Seq(s,s,s)),Par(Seq(s,s),Alt(Seq(s,s,s,s,s),Seq(s,s,s,s,s,s,s)),s)),Par(s,s)))",
+   "test_changes": 17739,
+   "timing_us": 1.7455063993111253,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 365,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G076_large",
+   "name": "G076_large",
+   "steps": 107,
+   "edges": 128,
+   "and_divergences": 1,
+   "or_divergences": 8,
+   "and_convergences": 0,
+   "or_convergences": 8,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 1.061,
+   "structure": "Loop(Alt(Seq(Alt(Seq(Seq(s,s),Seq(s,s,s,s,s),Seq(s,s,s,s,s,s,s,s)),Par(Seq(s,s),s,s,s),skip),Loop(Alt(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s))),Loop(Seq(s,s))),Seq(Alt(Seq(s,s,s,s,s),s,s),Alt(Seq(s,s),Par(Seq(s,s),Seq(s,s,s),s,s),Par(s,s)),Par(s,s)),skip))",
+   "test_changes": 10134,
+   "timing_us": 0.8320113993249834,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G077_large",
+   "name": "G077_large",
+   "steps": 80,
+   "edges": 115,
+   "and_divergences": 9,
+   "or_divergences": 7,
+   "and_convergences": 10,
+   "or_convergences": 7,
+   "max_out_degree": 6,
+   "max_in_degree": 7,
+   "tier": "large",
+   "max_concurrency": 12,
+   "mean_concurrency": 5.672,
+   "structure": "Alt(Par(Seq(s,Par(s,s,s),Par(Seq(s,s),Seq(s,s),Seq(Seq(s,s),s))),Seq(Alt(Seq(s,Seq(s,s)),Par(s,s,s,s),Loop(s)),Loop(Alt(Seq(s,s,s,s,s),Seq(s,s,s,s,s,s,s,s,s,s,s,s))),Alt(Par(s,s),Par(s,s,Seq(s,s),Seq(s,s,s)))),Seq(s,s),Loop(Seq(Par(Seq(s,s),s),Par(s,s),Par(Seq(s,s),Seq(s,s),Seq(s,s,s),Seq(s,s,s))))),Seq(s,s))",
+   "test_changes": 16066,
+   "timing_us": 1.7146676022093743,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 80,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 19,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G078_large",
+   "name": "G078_large",
+   "steps": 110,
+   "edges": 145,
+   "and_divergences": 7,
+   "or_divergences": 12,
+   "and_convergences": 8,
+   "or_convergences": 12,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 4,
+   "mean_concurrency": 2.544,
+   "structure": "Seq(Alt(Par(s,s,s,s),Seq(s,s)),Alt(Loop(Par(Seq(Seq(s,s,s,s,s,s,s,s,s,s,s,s),s),Seq(Seq(s,s),Seq(s,s,s),Seq(s,s,s,s),Seq(s,s,s,s)),Seq(s,s),Loop(Seq(s,s,s,s,s,s,s,s)))),Seq(Alt(s,Seq(s,s)),Loop(Alt(s,s,skip)),Par(s,s),Par(Seq(s,s),Seq(s,s,s)),Par(s,Seq(s,s,Seq(s,s,s)),s)),Seq(Loop(Par(Seq(s,s,s),Seq(s,s),s,s)),Loop(Seq(s,s)))),Par(Seq(s,s,s,s),Alt(s,s)),Alt(s,Par(Seq(s,s,s),s,Alt(s,s,s)),skip))",
+   "test_changes": 12441,
+   "timing_us": 0.9325349994469434,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 32,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 16,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G079_large",
+   "name": "G079_large",
+   "steps": 72,
+   "edges": 98,
+   "and_divergences": 5,
+   "or_divergences": 10,
+   "and_convergences": 6,
+   "or_convergences": 10,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 9,
+   "mean_concurrency": 5.596,
+   "structure": "Par(Alt(Loop(Par(s,Loop(s),Seq(s,s,Seq(s,s)),s)),Par(Seq(Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)),Par(s,s,s),s),s,Seq(s,s,s),Loop(Par(s,Seq(s,s,s))))),Alt(s,Par(s,s,s)),Seq(Alt(s,s,s),Loop(Seq(s,Par(Seq(s,s),s))),Alt(Loop(Par(s,s)),s)))",
+   "test_changes": 17629,
+   "timing_us": 1.2029843986965716,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 363,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G080_large",
+   "name": "G080_large",
+   "steps": 70,
+   "edges": 92,
+   "and_divergences": 4,
+   "or_divergences": 5,
+   "and_convergences": 4,
+   "or_convergences": 5,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "large",
+   "max_concurrency": 7,
+   "mean_concurrency": 5.854,
+   "structure": "Par(Alt(Loop(Seq(s,s)),Seq(s,s),skip),Seq(Alt(Seq(s,s),Par(Alt(s,s,s),Seq(s,Seq(s,s),Seq(s,s)),Seq(Seq(s,s,s,s,s),Seq(s,s,s),Seq(s,s,s),Seq(s,s,s))),skip),Alt(Par(Seq(s,Seq(s,s,s,s),s,s),Seq(s,s,Seq(s,s,s),Seq(s,s),Seq(s,s))),s,s)),Seq(Par(Seq(s,s),Seq(s,s),s),Par(Seq(s,s,s,s),Seq(s,s),s)))",
+   "test_changes": 18083,
+   "timing_us": 2.4821608036290854,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 274,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G081_complex",
+   "name": "G081_complex",
+   "steps": 88,
+   "edges": 158,
+   "and_divergences": 16,
+   "or_divergences": 16,
+   "and_convergences": 16,
+   "or_convergences": 16,
+   "max_out_degree": 7,
+   "max_in_degree": 11,
+   "tier": "complex",
+   "max_concurrency": 12,
+   "mean_concurrency": 4.611,
+   "structure": "Alt(Loop(Seq(s,s)),Seq(Alt(Par(Loop(Par(s,Seq(Par(s,s,s),Par(s,s),s),Alt(s,s),Loop(s),Loop(Loop(s)))),Seq(Loop(Par(s,Loop(s))),Alt(Par(s,s),Seq(s,s),s),Par(Loop(s),Loop(Par(s,s)),Seq(s,s,s),Seq(s,s)),Par(s,s,s,Seq(s,s)),Par(s,s,s,s,s))),Seq(Alt(Par(s,s),Loop(Par(s,Seq(s,s))),skip),Alt(s,s,s),Par(s,s,s,s,s))),Par(s,Seq(s,s))))",
+   "test_changes": 11941,
+   "timing_us": 1.6264506033621728,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 547,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G082_complex",
+   "name": "G082_complex",
+   "steps": 44,
+   "edges": 55,
+   "and_divergences": 0,
+   "or_divergences": 8,
+   "and_convergences": 0,
+   "or_convergences": 8,
+   "max_out_degree": 4,
+   "max_in_degree": 4,
+   "tier": "complex",
+   "max_concurrency": 2,
+   "mean_concurrency": 1.03,
+   "structure": "Alt(Loop(Alt(Seq(s,s),Loop(Loop(Loop(Alt(Seq(s,s),Loop(Seq(s,s,s,s,s,s,s,s,s,s,s,s,s,s,s)))))),skip)),s,Par(s,Seq(s,s,s,s,s)))",
+   "test_changes": 11438,
+   "timing_us": 0.95252720057033,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G083_complex",
+   "name": "G083_complex",
+   "steps": 72,
+   "edges": 103,
+   "and_divergences": 9,
+   "or_divergences": 9,
+   "and_convergences": 9,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 5,
+   "tier": "complex",
+   "max_concurrency": 12,
+   "mean_concurrency": 4.516,
+   "structure": "Par(Alt(Seq(Alt(s,s,s),Par(Seq(s,s,s),s),Par(s,s),Par(Seq(s,s),Seq(s,s)),Alt(s,s)),Seq(s,s,s,s,s),Par(Seq(s,s),s,s)),Alt(s,Par(s,s)),Alt(Seq(s,Par(s,s),s,s),Seq(Par(Loop(Par(Seq(s,s),Seq(s,Par(s,s)),s,s)),s,Seq(s,s)),Alt(Seq(s,s),Par(s,s)),Alt(s,s)),Par(Alt(s,s),Seq(s,s))))",
+   "test_changes": 14273,
+   "timing_us": 1.677764399209991,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 153,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G084_complex",
+   "name": "G084_complex",
+   "steps": 90,
+   "edges": 164,
+   "and_divergences": 24,
+   "or_divergences": 10,
+   "and_convergences": 21,
+   "or_convergences": 10,
+   "max_out_degree": 8,
+   "max_in_degree": 9,
+   "tier": "complex",
+   "max_concurrency": 13,
+   "mean_concurrency": 6.167,
+   "structure": "Par(Loop(Seq(Par(s,s),s,s)),Seq(Par(s,Seq(s,s),Seq(s,s),Loop(Par(s,s))),Par(Seq(s,s),Seq(s,s),Seq(s,s),s),Par(s,Alt(Par(s,s),Par(s,s,s,s,s),skip),s,Loop(Seq(s,s,Par(s,s)))),Par(Seq(s,s),s)),Seq(Loop(Loop(Seq(Par(s,s),Par(s,s),Alt(s,s,s),Par(s,s)))),Alt(Seq(s,s,Par(Seq(s,s),s,s),Par(s,Seq(s,s,s),s)),Loop(Par(s,Seq(s,s)))),Alt(Par(s,s),Par(Seq(s,s),s),Par(s,s,Seq(s,Par(s,s))),skip)),s)",
+   "test_changes": 13751,
+   "timing_us": 1.7134982044808567,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 639,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G085_complex",
+   "name": "G085_complex",
+   "steps": 54,
+   "edges": 83,
+   "and_divergences": 4,
+   "or_divergences": 7,
+   "and_convergences": 5,
+   "or_convergences": 7,
+   "max_out_degree": 9,
+   "max_in_degree": 9,
+   "tier": "complex",
+   "max_concurrency": 18,
+   "mean_concurrency": 7.982,
+   "structure": "Par(s,Loop(Par(s,s,Seq(s,s),Alt(s,s,skip))),Alt(Par(s,Seq(s,s),Seq(s,s,s),Seq(s,s,s),s),Par(s,Seq(s,s,s)),s,skip),Loop(Par(s,Seq(s,s,s,s),Seq(s,s),s,Seq(s,s))),Alt(Loop(Par(Loop(s),Seq(Par(s,s),s,s))),s,skip))",
+   "test_changes": 21977,
+   "timing_us": 1.2884091993328184,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1024,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G086_complex",
+   "name": "G086_complex",
+   "steps": 84,
+   "edges": 128,
+   "and_divergences": 6,
+   "or_divergences": 13,
+   "and_convergences": 7,
+   "or_convergences": 13,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "complex",
+   "max_concurrency": 21,
+   "mean_concurrency": 9.095,
+   "structure": "Par(Alt(Par(s,s,Alt(Seq(Par(s,s),s,s),Loop(s),skip)),Par(s,s)),Alt(Seq(s,s),Par(Seq(s,s),Seq(s,s),s),Par(s,s,Loop(Par(s,s)))),Alt(Par(s,s),Par(Alt(Par(Loop(s),s),Seq(s,s)),Alt(s,Par(s,Alt(s,s),s)),Seq(s,s,Par(s,s),s),Loop(Par(s,s)))),Loop(Par(Alt(Seq(s,s,s,Par(s,s,s),s),Par(s,s),s),Seq(s,s),s,Seq(s,s,s))),Seq(s,s))",
+   "test_changes": 17117,
+   "timing_us": 1.9764533964917064,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 3109,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G087_complex",
+   "name": "G087_complex",
+   "steps": 52,
+   "edges": 83,
+   "and_divergences": 5,
+   "or_divergences": 9,
+   "and_convergences": 6,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 7,
+   "tier": "complex",
+   "max_concurrency": 9,
+   "mean_concurrency": 4.505,
+   "structure": "Loop(Par(Alt(s,s),Loop(s),Alt(Loop(Par(s,s)),Par(Alt(Seq(Par(s,s),Par(s,s,s)),Par(s,s,s,s)),Alt(s,s,s)),Seq(s,Par(s,Seq(s,s)),Alt(Par(s,s),Par(Seq(s,s),s),skip))),Alt(s,Par(Seq(s,s),s),Par(s,s))))",
+   "test_changes": 18240,
+   "timing_us": 2.3682428000029176,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 75,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G088_complex",
+   "name": "G088_complex",
+   "steps": 41,
+   "edges": 60,
+   "and_divergences": 1,
+   "or_divergences": 8,
+   "and_convergences": 1,
+   "or_convergences": 8,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "complex",
+   "max_concurrency": 10,
+   "mean_concurrency": 4.958,
+   "structure": "Par(Alt(Par(Alt(s,s),s,Seq(s,s),Loop(Alt(Par(s,s,s,s,Seq(s,s)),s))),s),Loop(Alt(s,Seq(s,s,s,Alt(s,Seq(s,s),s,skip)))),Alt(s,s))",
+   "test_changes": 17607,
+   "timing_us": 1.2233583955094218,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 33,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 26,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G089_complex",
+   "name": "G089_complex",
+   "steps": 70,
+   "edges": 102,
+   "and_divergences": 2,
+   "or_divergences": 11,
+   "and_convergences": 3,
+   "or_convergences": 11,
+   "max_out_degree": 8,
+   "max_in_degree": 7,
+   "tier": "complex",
+   "max_concurrency": 10,
+   "mean_concurrency": 6.029,
+   "structure": "Par(Seq(Par(Alt(s,s,skip),s,Seq(s,Alt(Par(Seq(s,s),Seq(s,s,s)),Loop(s),skip),s),s),Alt(s,Par(s,s,s,Seq(s,s)),s,skip),Alt(s,s,skip)),Alt(s,s),Alt(Seq(Loop(Alt(Seq(Par(s,s),s,s,s,s),Seq(s,s,s))),Alt(s,s,skip),Alt(Par(s,s),s),Par(s,s,Seq(s,s))),s),Seq(s,s),Seq(s,s))",
+   "test_changes": 16737,
+   "timing_us": 1.2740826001390815,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 299,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 15,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G090_complex",
+   "name": "G090_complex",
+   "steps": 85,
+   "edges": 130,
+   "and_divergences": 13,
+   "or_divergences": 10,
+   "and_convergences": 13,
+   "or_convergences": 10,
+   "max_out_degree": 13,
+   "max_in_degree": 10,
+   "tier": "complex",
+   "max_concurrency": 9,
+   "mean_concurrency": 4.543,
+   "structure": "Alt(Loop(Par(Seq(s,s),Seq(s,Par(Seq(s,s),s),s,Par(s,Seq(s,s))),Seq(s,Par(s,s,s),Par(Seq(s,s),Seq(s,s)),Par(Seq(s,s),Seq(s,s),s,s,s)))),Par(Seq(Par(s,Alt(s,s),s,s,s),Loop(Par(s,Alt(Loop(Seq(s,Seq(s,s),s)),Seq(s,s),s))),Loop(Par(s,s))),Seq(Loop(s),Alt(s,s),Par(s,s),s,s),Seq(Alt(Par(s,s),s),Par(s,s,Seq(s,s,s)))),Par(s,s,Seq(Par(s,s),s,s,s)),skip)",
+   "test_changes": 15461,
+   "timing_us": 1.4711208001244813,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 101,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G091_complex",
+   "name": "G091_complex",
+   "steps": 59,
+   "edges": 93,
+   "and_divergences": 6,
+   "or_divergences": 9,
+   "and_convergences": 10,
+   "or_convergences": 9,
+   "max_out_degree": 10,
+   "max_in_degree": 8,
+   "tier": "complex",
+   "max_concurrency": 7,
+   "mean_concurrency": 2.284,
+   "structure": "Alt(Seq(s,Alt(s,s),Alt(s,s,skip),Par(s,Seq(s,s))),Seq(Par(s,s,s),s,Par(s,Seq(s,s)),Par(s,s,s,s,s),Alt(s,Loop(Par(s,s)),s)),Par(Seq(s,s),Loop(Alt(s,s)),Seq(Par(s,s),s,Par(s,s,s),s),Alt(Par(s,s),Par(s,Loop(s)))),skip)",
+   "test_changes": 13314,
+   "timing_us": 1.3895903946831822,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 23,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G092_complex",
+   "name": "G092_complex",
+   "steps": 64,
+   "edges": 101,
+   "and_divergences": 8,
+   "or_divergences": 7,
+   "and_convergences": 7,
+   "or_convergences": 7,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "complex",
+   "max_concurrency": 10,
+   "mean_concurrency": 5.552,
+   "structure": "Par(Seq(Alt(s,Par(s,s,s,s,s),s),Alt(Par(s,Seq(s,s)),Seq(Alt(Par(s,s),s),Par(s,s,s))),s),Seq(Par(s,s,s),Par(Alt(Seq(s,s),Par(Seq(s,s),s),skip),Seq(s,s)),Par(s,s,s),Alt(s,s,s),Par(Seq(s,s),Loop(s),s,Seq(s,s),Seq(s,s))),Alt(Par(s,s),Par(Seq(s,s),Seq(s,s)),s))",
+   "test_changes": 14619,
+   "timing_us": 1.4580641989596188,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 100,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 24,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G093_complex",
+   "name": "G093_complex",
+   "steps": 95,
+   "edges": 149,
+   "and_divergences": 7,
+   "or_divergences": 15,
+   "and_convergences": 6,
+   "or_convergences": 15,
+   "max_out_degree": 9,
+   "max_in_degree": 10,
+   "tier": "complex",
+   "max_concurrency": 15,
+   "mean_concurrency": 5.516,
+   "structure": "Par(s,Alt(Par(s,s),Loop(Par(Loop(Alt(Seq(s,s,s,s),Par(Seq(s,Seq(s,s)),Loop(Seq(s,s)),s),Loop(Par(Seq(s,s),s,s)),skip)),Alt(Par(s,s,s,Alt(s,s,s),Seq(s,s)),Par(Alt(Par(Seq(s,s),s),Seq(s,s),Par(s,s)),Seq(s,s,Par(s,s,s),Par(s,s)),Alt(Loop(Seq(s,s,s)),s)),skip),Seq(Par(s,Seq(s,s)),Alt(s,s,s),s))),skip),Alt(s,Par(s,Seq(s,s),Loop(s),Alt(Seq(s,s),Par(s,s,s),skip),s),Par(s,s)))",
+   "test_changes": 13025,
+   "timing_us": 1.1110991996247321,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1270,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 22,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G094_complex",
+   "name": "G094_complex",
+   "steps": 62,
+   "edges": 95,
+   "and_divergences": 9,
+   "or_divergences": 9,
+   "and_convergences": 8,
+   "or_convergences": 9,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "complex",
+   "max_concurrency": 12,
+   "mean_concurrency": 3.106,
+   "structure": "Alt(Par(Loop(Par(s,s)),Seq(s,Alt(s,Par(s,s)),Par(s,s,s),s),Alt(s,Loop(Par(s,Seq(s,s))),Par(Seq(s,s),s,s,s)),Seq(s,s),Alt(Loop(Alt(Par(s,s,s,s),s)),Seq(s,s,s),s)),Loop(Seq(s,s,Par(s,s,Seq(s,s)),Par(Seq(s,s),Seq(s,s)),Par(s,s))))",
+   "test_changes": 13728,
+   "timing_us": 1.3404729950707406,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 427,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 12,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G095_complex",
+   "name": "G095_complex",
+   "steps": 96,
+   "edges": 151,
+   "and_divergences": 10,
+   "or_divergences": 15,
+   "and_convergences": 8,
+   "or_convergences": 15,
+   "max_out_degree": 7,
+   "max_in_degree": 9,
+   "tier": "complex",
+   "max_concurrency": 21,
+   "mean_concurrency": 9.787,
+   "structure": "Par(Loop(Par(Loop(Par(s,s,s,s)),Seq(s,s,s),s,Alt(s,Seq(s,s),Par(s,s)),s)),Alt(s,Loop(Par(Seq(s,s),Alt(s,s),Seq(s,s))),skip),Alt(Par(s,s,Seq(s,Par(s,s))),Par(Seq(s,s),s,Seq(s,s)),Loop(Par(s,s))),Seq(s,s),Seq(Loop(Alt(Par(s,s),Seq(s,s,s),skip)),Par(Alt(s,Par(Seq(s,s),s,Seq(s,s)),s),s,Seq(Alt(s,Par(s,s,s,s),s),Par(s,s)),Seq(Alt(Seq(Par(s,s),Par(s,s)),Loop(Par(s,s))),Alt(s,s)))))",
+   "test_changes": 20161,
+   "timing_us": 1.6204840037971735,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 2865,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 24,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G096_complex",
+   "name": "G096_complex",
+   "steps": 62,
+   "edges": 93,
+   "and_divergences": 3,
+   "or_divergences": 10,
+   "and_convergences": 3,
+   "or_convergences": 10,
+   "max_out_degree": 7,
+   "max_in_degree": 7,
+   "tier": "complex",
+   "max_concurrency": 5,
+   "mean_concurrency": 1.642,
+   "structure": "Seq(Alt(Par(Loop(Par(s,s)),Seq(Loop(Alt(s,s,Par(s,s))),Par(s,s,s))),Loop(Alt(s,Seq(s,s,s,Par(s,s))))),Loop(Alt(Par(Seq(s,s),Seq(Par(s,s),s),Seq(s,s)),Par(Alt(Par(s,s),s,s,skip),Alt(Par(s,s,Seq(s,s)),s,Par(s,s),skip)),Seq(s,s,s))),s,Par(s,Seq(s,s)))",
+   "test_changes": 10149,
+   "timing_us": 1.3819943997077644,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 6,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 13,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G097_complex",
+   "name": "G097_complex",
+   "steps": 90,
+   "edges": 136,
+   "and_divergences": 8,
+   "or_divergences": 15,
+   "and_convergences": 9,
+   "or_convergences": 15,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "complex",
+   "max_concurrency": 15,
+   "mean_concurrency": 5.553,
+   "structure": "Alt(Par(Loop(Par(Seq(Par(s,Loop(s)),s,Alt(s,s,s,skip)),Alt(Seq(s,s,s,s,s),Loop(Par(s,s,Seq(s,s),s))),Seq(s,s),Loop(s),Loop(Loop(Par(s,Seq(s,s)))))),Alt(Seq(Alt(Par(s,s),Par(s,s),Par(s,s)),Loop(Par(s,s)),Par(s,s,Seq(s,s),Seq(s,s),s),Loop(Par(Seq(s,s),s))),Seq(s,Par(s,Seq(s,s),Seq(s,s),s)))),Seq(Par(s,s),Par(s,s),Alt(s,Par(s,s),Seq(s,s)),Alt(s,s)),skip)",
+   "test_changes": 13001,
+   "timing_us": 1.5177728026174009,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1534,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 18,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G098_complex",
+   "name": "G098_complex",
+   "steps": 92,
+   "edges": 128,
+   "and_divergences": 3,
+   "or_divergences": 14,
+   "and_convergences": 5,
+   "or_convergences": 14,
+   "max_out_degree": 6,
+   "max_in_degree": 6,
+   "tier": "complex",
+   "max_concurrency": 9,
+   "mean_concurrency": 3.661,
+   "structure": "Alt(Par(Seq(s,s),Seq(Loop(s),s,s,s,s),Loop(Alt(Par(s,s,s,s),Seq(s,s,s,s,s),skip)),Alt(Seq(Par(s,s),s,s,Loop(Loop(Par(s,s))),s),Seq(Par(s,s),s,Par(s,s),s,s),Loop(Alt(Par(Alt(s,s),s),Par(Loop(Par(Seq(s,s,s,s,s,s,s,s,s,s,s),Seq(s,s,s,s,s))),Seq(s,s,s)),Par(s,s))))),Par(Alt(s,s,skip),Alt(Loop(Seq(s,s)),Par(s,s,s),s)))",
+   "test_changes": 14925,
+   "timing_us": 0.9865508007351308,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 1180,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 20,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G099_complex",
+   "name": "G099_complex",
+   "steps": 41,
+   "edges": 63,
+   "and_divergences": 4,
+   "or_divergences": 7,
+   "and_convergences": 6,
+   "or_convergences": 7,
+   "max_out_degree": 5,
+   "max_in_degree": 5,
+   "tier": "complex",
+   "max_concurrency": 5,
+   "mean_concurrency": 1.589,
+   "structure": "Seq(Loop(Par(Alt(s,Par(Seq(s,s),s),s,skip),Alt(Seq(Par(s,s,s),s),s))),Alt(Par(s,s),s,s,skip),Loop(Seq(Loop(s),Par(s,s,s),Loop(Par(s,s)),Par(Seq(s,s),s),Par(s,s))))",
+   "test_changes": 9319,
+   "timing_us": 1.3440644019283354,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 0,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 17,
+   "stealthy_episodes": 120
+  },
+  {
+   "graph": "G100_complex",
+   "name": "G100_complex",
+   "steps": 80,
+   "edges": 120,
+   "and_divergences": 6,
+   "or_divergences": 13,
+   "and_convergences": 5,
+   "or_convergences": 13,
+   "max_out_degree": 8,
+   "max_in_degree": 8,
+   "tier": "complex",
+   "max_concurrency": 12,
+   "mean_concurrency": 3.98,
+   "structure": "Loop(Alt(Par(Seq(s,s),Seq(Loop(Par(Seq(Par(s,s,s,s,s),s,s,s,s),s,Seq(s,s))),s),Alt(Par(Seq(s,s),s,s,Seq(s,s)),Par(s,s,s,Seq(s,s)))),Seq(Alt(s,s,Seq(s,s)),Par(Seq(s,s,s),Alt(Seq(s,s,s,s),Par(s,s)),Loop(Par(Alt(Par(s,s),Seq(s,s)),s,Loop(Par(s,Seq(s,s)))))),Par(Loop(Loop(Alt(s,s,s,skip))),Alt(s,s)))))",
+   "test_changes": 12396,
+   "timing_us": 0.8145515981595963,
+   "false_alarms_full": 0,
+   "false_alarms_wl": 23,
+   "violating_detected": 320,
+   "violating_episodes": 320,
+   "stealthy_detected": 21,
+   "stealthy_episodes": 120
+  }
+ ]
+}

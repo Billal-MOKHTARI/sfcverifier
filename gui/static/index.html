@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>SFC Runtime Verifier</title>
+  <link rel="stylesheet" href="/static/vendor/vis-network.css">
+  <link rel="stylesheet" href="/static/style.css">
+</head>
+<body>
+<header class="topbar">
+  <div class="brand">
+    <span class="logo" aria-hidden="true">
+      <svg viewBox="0 0 24 24" width="22" height="22"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8 8l3 7M16 8l-3 7"/></svg>
+    </span>
+    <div>
+      <div class="brand-title">SFC Runtime Verifier</div>
+      <div class="brand-sub">fired-transition matrix &Phi; = diag(l)&middot;X&middot;diag(n)</div>
+    </div>
+  </div>
+  <nav class="tabs" role="tablist">
+    <button class="tab active" data-tab="monitor" role="tab">Monitor</button>
+    <button class="tab" data-tab="matrices" role="tab">Matrices</button>
+    <button class="tab" data-tab="evaluation" role="tab">Evaluation</button>
+  </nav>
+  <div class="graph-picker">
+    <label for="graph-select">Graph</label>
+    <select id="graph-select"></select>
+  </div>
+</header>
+
+<main>
+  <!-- ============================================================ MONITOR -->
+  <section id="tab-monitor" class="view active">
+    <div class="monitor">
+      <div class="canvas-wrap">
+        <div class="canvas-bar">
+          <div class="graph-badge" id="graph-badge"></div>
+          <div class="legend">
+            <span><i class="lg lg-active"></i>active</span>
+            <span><i class="lg lg-visited"></i>executed</span>
+            <span><i class="lg lg-and"></i>AND divergence</span>
+            <span><i class="lg lg-fired"></i>fired edge</span>
+            <span><i class="lg lg-viol"></i>violation</span>
+          </div>
+        </div>
+        <div id="network"></div>
+        <div class="player">
+          <div class="player-row">
+            <button class="icon-btn" id="btn-back" title="Previous scan">&#9664;&#9664;</button>
+            <button class="icon-btn primary" id="btn-play" title="Play / pause">&#9654;</button>
+            <button class="icon-btn" id="btn-fwd" title="Next scan">&#9654;&#9654;</button>
+            <button class="chip-btn" id="btn-next-alarm" title="Jump to the next alarm">next alarm</button>
+            <select id="speed" title="Playback speed">
+              <option value="1">1&times;</option><option value="2">2&times;</option>
+              <option value="5" selected>5&times;</option><option value="10">10&times;</option>
+              <option value="25">25&times;</option>
+            </select>
+            <div class="time" id="time-label">t = 0 s</div>
+          </div>
+          <div class="timeline">
+            <canvas id="timeline"></canvas>
+            <input type="range" id="scrub" min="0" max="0" value="0">
+          </div>
+        </div>
+      </div>
+
+      <aside class="side">
+        <div class="card">
+          <h3>Scenario</h3>
+          <div class="form-grid">
+            <label>Scans<input type="number" id="in-scans" value="600" min="50" max="20000" step="50"></label>
+            <label>Seed<input type="number" id="in-seed" value="0"></label>
+          </div>
+          <label class="full">Inject attack
+            <select id="in-attack"></select>
+          </label>
+          <p class="hint" id="attack-desc"></p>
+          <div class="row">
+            <button class="btn primary" id="btn-simulate">Simulate &amp; verify</button>
+            <label class="btn ghost file-btn">Import CSV<input type="file" id="in-csv" accept=".csv"></label>
+          </div>
+          <div class="trace-summary" id="trace-summary"></div>
+        </div>
+
+        <div class="card verdict-card">
+          <div class="verdict-head">
+            <h3>Verification</h3>
+            <span class="pill" id="verdict-pill">&ndash;</span>
+          </div>
+          <div class="kv"><span>Transition</span><b id="v-transition">&ndash;</b></div>
+          <div class="kv"><span>Active S(t)</span><div class="chips" id="v-active"></div></div>
+          <div class="kv"><span>Left l</span><div class="chips" id="v-left"></div></div>
+          <div class="kv"><span>Entered n</span><div class="chips" id="v-entered"></div></div>
+          <div class="kv"><span>Fired &Phi;</span><div class="chips" id="v-fired"></div></div>
+          <ul class="violations" id="v-violations"></ul>
+        </div>
+
+        <div class="card">
+          <h3>Selection</h3>
+          <div id="selection" class="hint">Click a step or an edge.</div>
+        </div>
+
+        <div class="card">
+          <h3>View</h3>
+          <div class="row wrap">
+            <button class="chip-btn" id="btn-relayout">Re-layout</button>
+            <button class="chip-btn" id="btn-fit">Fit</button>
+            <label class="toggle"><input type="checkbox" id="chk-labels" checked> edge labels k</label>
+          </div>
+          <label class="full">All edges
+            <select id="all-edges">
+              <option value="">keep individual choices</option>
+              <option value="auto">automatic</option>
+              <option value="straight">straight</option>
+              <option value="cw">curved (left)</option>
+              <option value="ccw">curved (right)</option>
+            </select>
+          </label>
+          <p class="hint">Drag steps to arrange the chart; click an edge to change its shape.</p>
+        </div>
+      </aside>
+    </div>
+  </section>
+
+  <!-- ============================================================ MATRICES -->
+  <section id="tab-matrices" class="view">
+    <div class="matrices-head">
+      <div>
+        <h2>Matrices at <span id="m-time">t</span></h2>
+        <p class="hint">E(t) = X&middot;diag(S(t)) &nbsp;&middot;&nbsp; &Phi;(t) = diag(l)&middot;E(t)&middot;diag(n),
+          l = S(t&minus;1)&#8728;(1&minus;S(t)), n = S(t)&#8728;(1&minus;S(t&minus;1))</p>
+      </div>
+      <div class="row">
+        <div class="segmented" id="m-scope">
+          <button data-scope="involved" class="on">Involved steps</button>
+          <button data-scope="all">All steps</button>
+        </div>
+        <button class="icon-btn" id="m-back">&#9664;</button>
+        <button class="icon-btn" id="m-fwd">&#9654;</button>
+      </div>
+    </div>
+    <div class="matrix-grid">
+      <div class="card matrix-card"><h3>Rule checks</h3><div id="m-rules"></div></div>
+      <div class="card matrix-card"><h3>Fired-transition matrix &Phi;(t)</h3><div class="mwrap" id="m-phi"></div></div>
+      <div class="card matrix-card"><h3>Constraint matrix E(t) = X&middot;diag(S(t))</h3><div class="mwrap" id="m-e"></div></div>
+      <div class="card matrix-card"><h3>Transition matrix X</h3><div class="mwrap" id="m-x"></div></div>
+    </div>
+  </section>
+
+  <!-- ============================================================ EVALUATION -->
+  <section id="tab-evaluation" class="view">
+    <div class="eval-head">
+      <div>
+        <h2>Evaluation on the benchmark</h2>
+        <p class="hint" id="eval-meta">No evaluation results yet.</p>
+      </div>
+      <div class="row">
+        <select id="eval-profile">
+          <option value="full">full (40 episodes/attack, 50k scans/graph)</option>
+          <option value="quick">quick (8 episodes/attack, 3k scans/graph)</option>
+        </select>
+        <button class="btn primary" id="btn-eval">Run evaluation</button>
+      </div>
+    </div>
+    <div class="progress hidden" id="eval-progress"><div class="bar" id="eval-bar"></div><span id="eval-status"></span></div>
+    <div id="eval-body"></div>
+  </section>
+</main>
+
+<div class="toast hidden" id="toast"></div>
+<script src="/static/vendor/vis-network.min.js"></script>
+<script type="module" src="/static/app.js"></script>
+</body>
+</html>
