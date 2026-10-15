@@ -17,6 +17,7 @@ from __future__ import annotations
 
 import json
 import mimetypes
+import os
 import sys
 import threading
 import traceback
@@ -272,12 +273,24 @@ class Handler(BaseHTTPRequestHandler):
             self._json({"error": str(exc)}, 400)
 
 
-def serve(port: int = 8765, open_browser: bool = True) -> None:
-    httpd = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    url = f"http://0.0.0.0:{port}/"
-    print(f"SFC verifier GUI on {url}  (Ctrl+C to stop)")
+def serve(port: int | None = None, open_browser: bool | None = None) -> None:
+    """Serve the GUI.
+
+    Without an explicit port, PORT and HOST from the environment win, so the
+    server also runs behind a platform that assigns its own port; it then binds
+    every interface and skips opening a browser.
+    """
+    env_port = os.environ.get("PORT")
+    managed = port is None and bool(env_port)
+    port = port if port is not None else int(env_port or 8765)
+    host = os.environ.get("HOST") or ("0.0.0.0" if managed else "127.0.0.1")
+    if open_browser is None:
+        open_browser = not managed
+    httpd = ThreadingHTTPServer((host, port), Handler)
+    url = f"http://{host}:{port}/"
+    print(f"SFC verifier GUI on {url}  (Ctrl+C to stop)", flush=True)
     if open_browser:
-        webbrowser.open(url)
+        webbrowser.open(f"http://127.0.0.1:{port}/")
     try:
         httpd.serve_forever()
     except KeyboardInterrupt:
