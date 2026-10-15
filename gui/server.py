@@ -274,7 +274,7 @@ class Handler(BaseHTTPRequestHandler):
 
 def serve(port: int = 8765, open_browser: bool = True) -> None:
     httpd = ThreadingHTTPServer(("127.0.0.1", port), Handler)
-    url = f"http://127.0.0.1:{port}/"
+    url = f"http://0.0.0.0:{port}/"
     print(f"SFC verifier GUI on {url}  (Ctrl+C to stop)")
     if open_browser:
         webbrowser.open(url)
