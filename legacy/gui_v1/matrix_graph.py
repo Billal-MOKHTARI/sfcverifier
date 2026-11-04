@@ -71,7 +71,7 @@ def build_graph(tuples, height="100vh"):
             n, label=str(n), shape="circle", size=22,
             color=AND_COLOR if kind == "AND" else OTHER_COLOR,
             font={"color": "#ffffff" if kind == "AND" else "#222222"},
-            title=f"Node {n}" + (f" — {kind} divergence" if kind else ""),
+            title=f"Node {n}" + (f" - {kind} divergence" if kind else ""),
         )
     for i, j, k in tuples:
         net.add_edge(i, j, id=f"{i}-{j}-{k}", label=str(k), title=f"δ({i},{j})^{k}",
@@ -101,7 +101,7 @@ LEGEND = """
      display:flex;flex-direction:column">
   <div style="padding:8px 10px;border-bottom:1px solid #ddd">
     <b>Edge shape</b><br>
-    All: <select id="all-shape"><option value="">—</option></select>
+    All: <select id="all-shape"><option value="">-</option></select>
     <div style="color:#666;margin-top:4px">Click an edge to find it in the list.</div>
   </div>
   <div id="edge-list" style="overflow-y:auto;padding:4px 10px"></div>
@@ -417,7 +417,7 @@ function updateInfo() {
   en.forEach(function (v) {
     lines.push("<li>state " + v + ": " + (preds[v].length ? preds[v].join(", ") : "none") + "</li>");
   });
-  var t = (frame >= 0 && rows.length) ? rows[frame].t + " s" : "— (no CSV / not started)";
+  var t = (frame >= 0 && rows.length) ? rows[frame].t + " s" : "- (no CSV / not started)";
   document.getElementById("pred-summary").innerHTML =
     "<div><b>t = " + t + "</b></div>" +
     "<div>Enabled states: <b>" + (en.length ? en.join(", ") : "none") + "</b></div>" +

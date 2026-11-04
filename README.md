@@ -1,4 +1,4 @@
-# sfcverify — runtime structural verification of SFC executions
+# SFCVerifier: What a Runtime Monitor Can and Cannot Detect in PLC Sequential Function Charts
 
 Detects control-flow anomalies in a running SFC (PLC control logic) by checking every pair of
 consecutive activation vectors `S(t-1) → S(t)` against the transition matrix `X`.
